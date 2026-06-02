@@ -70,17 +70,17 @@ export function About() {
             className="relative grid grid-cols-2 gap-4"
           >
             <img 
-              src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+              src="/images/hotel-lobby-dining.png" 
               alt="Hotel Reception" 
               className="col-span-2 w-full h-64 object-cover rounded-2xl shadow-lg"
             />
             <img 
-              src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+              src="/images/hotel-room.png" 
               alt="Comfortable Room" 
               className="w-full h-48 object-cover rounded-2xl shadow-lg"
             />
             <img 
-              src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+              src="/images/hotel-exterior.png" 
               alt="Cozy Details" 
               className="w-full h-48 object-cover rounded-2xl shadow-lg"
             />

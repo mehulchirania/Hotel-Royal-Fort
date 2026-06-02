@@ -67,7 +67,7 @@ export function Dining() {
                className="relative rounded-2xl overflow-hidden shadow-2xl"
             >
               <img 
-                src="https://images.unsplash.com/photo-1544148103-0773bf10d330?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                src="/images/hotel-lobby-dining.png" 
                 alt="Hotel Dining Area" 
                 className="w-full h-full object-cover aspect-square lg:aspect-[4/5] opacity-90"
               />

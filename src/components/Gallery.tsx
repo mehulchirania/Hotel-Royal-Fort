@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from 'motion/react';
 import { hotel } from '../data/hotel';
 
 const images = [
-  { url: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Representative hotel exterior view', colSpan: 'col-span-1 md:col-span-2', rowSpan: 'row-span-2' },
-  { url: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Representative AC room interior', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
-  { url: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Representative suite bedding', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
-  { url: 'https://images.unsplash.com/photo-1621293954908-907159247fc8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Representative bathroom amenity view', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
-  { url: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Representative front desk area', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
-  { url: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Representative restaurant and lounge seating', colSpan: 'col-span-1 md:col-span-2', rowSpan: 'row-span-1' },
+  { url: '/images/hotel-exterior.png', alt: 'Representative hotel exterior view', colSpan: 'col-span-1 md:col-span-2', rowSpan: 'row-span-2' },
+  { url: '/images/hotel-room.png', alt: 'Representative AC room interior', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
+  { url: '/images/hotel-room.png', alt: 'Representative suite bedding', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
+  { url: '/images/hotel-lobby-dining.png', alt: 'Representative front desk area', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
+  { url: '/images/hotel-exterior.png', alt: 'Representative hotel approach view', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
+  { url: '/images/hotel-lobby-dining.png', alt: 'Representative restaurant and lounge seating', colSpan: 'col-span-1 md:col-span-2', rowSpan: 'row-span-1' },
 ];
 
 export function Gallery() {

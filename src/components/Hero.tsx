@@ -103,7 +103,7 @@ export function Hero() {
           >
             <div className="relative aspect-[4/3] lg:aspect-[3/4] w-full rounded-2xl overflow-hidden shadow-2xl">
               <img 
-                src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                src="/images/hotel-exterior.png" 
                 alt="Hotel Royal Fort Exterior and Reception" 
                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
               />

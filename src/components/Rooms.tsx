@@ -8,12 +8,12 @@ export function Rooms() {
     {
       title: 'Chief AC Room',
       description: 'A practical air-conditioned room for solo travellers and short stays, with clean essentials and easy service access.',
-      image: 'https://images.unsplash.com/photo-1618773928120-2e1cb1120025?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/images/hotel-room.png',
     },
     {
       title: 'Deluxe AC Room',
       description: 'A roomier air-conditioned option for couples and business guests looking for extra comfort during a Ballari stay.',
-      image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+      image: '/images/hotel-room.png',
     },
   ];
 
