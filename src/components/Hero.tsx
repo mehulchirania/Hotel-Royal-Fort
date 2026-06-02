@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, MessageCircle, MapPin, CheckCircle2 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function Hero() {
   return (
@@ -20,7 +21,7 @@ export function Hero() {
           >
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold-500/10 text-gold-600 font-medium text-sm mb-6">
               <MapPin className="w-4 h-4" />
-              <span>Heart of Ballari, Karnataka</span>
+              <span>{hotel.shortAddress}</span>
             </div>
             
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-gray-900 leading-tight mb-6">
@@ -34,7 +35,7 @@ export function Hero() {
             </h1>
             
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Hotel Royal Fort offers clean rooms, warm hospitality, convenient access, and a peaceful stay for families, business travellers, and visitors to Bellary.
+              Hotel Royal Fort offers AC rooms and suites, warm hospitality, restaurant and lounge facilities, and convenient access for families, business travellers, and visitors to Ballari.
             </p>
             
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10">
@@ -53,33 +54,33 @@ export function Hero() {
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Business Friendly</span>
+                <span>Business Centre</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Easy Access</span>
+                <span>Restaurant & Lounge</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>Comfortable Rooms</span>
+                <span>{hotel.rating} on Google</span>
               </div>
             </div>
             
             {/* Quick Contact Strip */}
             <div className="mt-10 flex flex-wrap justify-center lg:justify-start gap-6 border-t border-gray-100 pt-6">
-               <a href="tel:+910000000000" className="flex items-center gap-2 text-gray-700 hover:text-maroon-800 transition-colors">
+               <a href={`tel:${hotel.phoneTel}`} className="flex items-center gap-2 text-gray-700 hover:text-maroon-800 transition-colors">
                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center">
                     <Phone className="w-4 h-4" />
                  </div>
                  <span className="font-medium text-sm">Call Hotel</span>
                </a>
-               <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-700 hover:text-emerald-600 transition-colors">
+               <a href={`https://wa.me/${hotel.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-700 hover:text-emerald-600 transition-colors">
                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center">
                     <MessageCircle className="w-4 h-4" />
                  </div>
                  <span className="font-medium text-sm">WhatsApp</span>
                </a>
-               <a href="#contact" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors">
+               <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-gray-700 hover:text-blue-600 transition-colors">
                  <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center">
                     <MapPin className="w-4 h-4" />
                  </div>
@@ -107,7 +108,7 @@ export function Hero() {
                  <p className="font-serif text-2xl font-medium">Hotel Royal Fort</p>
                  <p className="text-sm opacity-90 flex items-center gap-1 mt-1">
                    <MapPin className="w-3.5 h-3.5" />
-                   Ballari, Karnataka
+                   {hotel.shortAddress}
                  </p>
               </div>
             </div>
@@ -121,8 +122,8 @@ export function Hero() {
                    </svg>
                  </div>
                  <div>
-                   <p className="text-sm font-bold text-gray-900">Highly Rated</p>
-                   <p className="text-xs text-gray-500">For Comfort & Cleanliness</p>
+                   <p className="text-sm font-bold text-gray-900">{hotel.rating} Rating</p>
+                   <p className="text-xs text-gray-500">{hotel.reviewCount} Google reviews</p>
                  </div>
                </div>
             </div>

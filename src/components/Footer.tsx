@@ -1,5 +1,6 @@
 import React from 'react';
 import { Facebook, Instagram, Twitter, MapPin } from 'lucide-react';
+import { hotel } from '../data/hotel';
 
 export function Footer() {
   return (
@@ -18,7 +19,7 @@ export function Footer() {
               </div>
             </div>
             <p className="text-sm mb-6 leading-relaxed max-w-xs">
-              Comfortable, clean, and convenient stays in the heart of Ballari. Perfect for families and business travellers.
+              Comfortable rooms and suites on New Trunk Road in Ballari, with restaurant, lounge, parking, and direct booking support.
             </p>
             <div className="flex items-center gap-3">
               <a href="#" className="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center hover:bg-maroon-800 hover:text-white transition-colors">
@@ -59,9 +60,9 @@ export function Footer() {
             <div className="text-sm space-y-3">
               <p className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-maroon-600 flex-shrink-0 mt-0.5" />
-                Hotel Royal Fort, Near Royal Circle, Ballari, Karnataka 583101
+                {hotel.address}
               </p>
-              <a href="https://maps.app.goo.gl/vVGSAApmL79wqteK8" target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-gold-500 hover:text-gold-400 text-xs font-semibold uppercase tracking-wider transition-colors border-b border-gold-500/30 pb-0.5">
+              <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-gold-500 hover:text-gold-400 text-xs font-semibold uppercase tracking-wider transition-colors border-b border-gold-500/30 pb-0.5">
                 Open in Google Maps
               </a>
             </div>

@@ -1,23 +1,24 @@
 import React from 'react';
 import { ShieldCheck, Map, HeartHandshake } from 'lucide-react';
 import { motion } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function About() {
   const features = [
     {
       icon: <ShieldCheck className="w-8 h-8 text-gold-500" />,
-      title: 'Comfortable Stay',
-      description: 'Clean, well-maintained rooms for peaceful rest and relaxation.'
+      title: 'AC Rooms & Suites',
+      description: 'Chief AC Rooms, King Suites, Queen Suites, and Viceroy Suites for different stay needs.'
     },
     {
       icon: <Map className="w-8 h-8 text-gold-500" />,
-      title: 'Convenient Location',
-      description: 'Easy access to local landmarks, transport, business areas, and city attractions.'
+      title: 'Verified Maps Location',
+      description: `Located at ${hotel.shortAddress}, with quick access to transport, business areas, and city attractions.`
     },
     {
       icon: <HeartHandshake className="w-8 h-8 text-gold-500" />,
       title: 'Warm Hospitality',
-      description: 'Friendly support for families, professionals, and all travellers.'
+      description: 'Restaurant, lounge, bar, room service, transfers, and front-desk assistance for travellers.'
     }
   ];
 
@@ -38,7 +39,7 @@ export function About() {
                 About <span className="text-maroon-800">Hotel Royal Fort</span>
               </h2>
               <p className="text-gray-600 text-lg leading-relaxed">
-                Hotel Royal Fort in Ballari is designed for guests who want a comfortable, clean, and convenient stay. Whether you are visiting for work, family travel, local events, or a short stopover, our hotel offers practical comfort with warm service and easy access to key parts of the city.
+                Hotel Royal Fort in Ballari is designed for guests who want a comfortable, convenient stay near the city's transport and business routes. The listing highlights AC rooms and suites, restaurant and lounge facilities, parking, Wi-Fi, room service, and helpful guest support at {hotel.shortAddress}.
               </p>
             </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, Mail, MapPin, MessageCircle, Send } from 'lucide-react';
 import { motion } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -43,7 +44,7 @@ export function Contact() {
                   <div>
                     <h3 className="font-bold text-lg mb-1">Phone</h3>
                     <p className="text-maroon-100/90 text-sm mb-2">Available 24/7 for booking support</p>
-                    <a href="tel:+910000000000" className="text-xl font-semibold hover:text-gold-400 transition-colors">+91 00000 00000</a>
+                    <a href={`tel:${hotel.phoneTel}`} className="text-xl font-semibold hover:text-gold-400 transition-colors">{hotel.phoneDisplay}</a>
                   </div>
               </div>
 
@@ -54,7 +55,7 @@ export function Contact() {
                   <div>
                     <h3 className="font-bold text-lg mb-1">WhatsApp</h3>
                     <p className="text-maroon-100/90 text-sm mb-2">Message us for quick replies</p>
-                    <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" className="text-xl font-semibold hover:text-emerald-400 transition-colors">+91 00000 00000</a>
+                    <a href={`https://wa.me/${hotel.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-xl font-semibold hover:text-emerald-400 transition-colors">{hotel.phoneDisplay}</a>
                   </div>
               </div>
 
@@ -65,7 +66,7 @@ export function Contact() {
                   <div>
                     <h3 className="font-bold text-lg mb-1">Email</h3>
                     <p className="text-maroon-100/90 text-sm mb-2">Send us your detailed enquiries</p>
-                    <a href="mailto:contact@hotelroyalfort.com" className="text-lg font-semibold hover:text-gold-400 transition-colors">contact@hotelroyalfort.com</a>
+                    <a href={`mailto:${hotel.email}`} className="text-lg font-semibold hover:text-gold-400 transition-colors">{hotel.email}</a>
                   </div>
               </div>
 
@@ -75,8 +76,8 @@ export function Contact() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">Address</h3>
-                    <p className="text-maroon-100/90 text-sm mb-2">Hotel Royal Fort, Near Royal Circle, Ballari, Karnataka - 583101</p>
-                    <a href="https://maps.app.goo.gl/vVGSAApmL79wqteK8" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-gold-400 hover:text-gold-300 transition-colors mt-1 border-b border-gold-400/30 hover:border-gold-300 pb-0.5">
+                    <p className="text-maroon-100/90 text-sm mb-2">{hotel.address}</p>
+                    <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-sm font-semibold text-gold-400 hover:text-gold-300 transition-colors mt-1 border-b border-gold-400/30 hover:border-gold-300 pb-0.5">
                       Get Google Maps Directions
                     </a>
                   </div>

@@ -1,23 +1,24 @@
 import React from 'react';
 import { Coffee, MapPin, ConciergeBell } from 'lucide-react';
 import { motion } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function Dining() {
   const options = [
     {
       icon: <Coffee className="w-6 h-6" />,
-      title: 'Breakfast & Tea',
-      description: 'Start your day with a warm beverage and light breakfast options. Check with the reception for daily availability.'
+      title: 'Restaurant',
+      description: 'The hotel listing includes an in-house restaurant for convenient dining during your stay.'
     },
     {
       icon: <MapPin className="w-6 h-6" />,
-      title: 'Local Food Access',
-      description: 'Centrally located with easy access to Bellary\'s popular local eateries and restaurants just a short walk away.'
+      title: 'Lounge & Bar',
+      description: 'Lounge and bar facilities are listed for guests who want an easy place to unwind without leaving the property.'
     },
     {
       icon: <ConciergeBell className="w-6 h-6" />,
       title: 'Room Service Support',
-      description: 'Enjoy the convenience of having select food items and beverages arranged for you in the comfort of your room.'
+      description: 'Room service and nearby food access make quick meals simple around New Trunk Road and Siddartha Nagar.'
     }
   ];
 
@@ -32,7 +33,7 @@ export function Dining() {
           <div className="flex-1 text-center lg:text-left">
             <h2 className="font-serif text-3xl sm:text-4xl text-white font-bold mb-6">Dining & Food Options</h2>
             <p className="text-maroon-100/90 text-lg mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Enjoy convenient food options during your stay. Guests can check with the hotel for available dining, breakfast, tea, snacks, and nearby food recommendations.
+              Enjoy convenient food options during your stay. Hotel Royal Fort's listing includes a restaurant, lounge, bar, and room service, with local restaurants nearby around {hotel.shortAddress}.
             </p>
             
             <div className="grid gap-6">

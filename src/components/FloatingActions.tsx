@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Phone, MessageCircle, ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function FloatingActions() {
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -22,14 +23,14 @@ export function FloatingActions() {
       {/* Mobile Sticky Bottom CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] p-3 flex gap-3">
         <a 
-          href="tel:+910000000000"
+          href={`tel:${hotel.phoneTel}`}
           className="flex-1 flex justify-center items-center gap-2 bg-maroon-800 text-white font-medium py-3 rounded-lg shadow-sm"
         >
           <Phone className="w-4 h-4 fill-current" />
           <span className="text-sm">Call Now</span>
         </a>
         <a 
-          href="https://wa.me/910000000000"
+          href={`https://wa.me/${hotel.whatsapp}`}
           target="_blank" 
           rel="noopener noreferrer"
           className="flex-1 flex justify-center items-center gap-2 bg-emerald-500 text-white font-medium py-3 rounded-lg shadow-sm"
@@ -42,7 +43,7 @@ export function FloatingActions() {
       {/* Desktop Floating Actions */}
       <div className="hidden md:flex fixed bottom-6 right-6 z-40 flex-col gap-3">
         <a 
-          href="https://wa.me/910000000000"
+          href={`https://wa.me/${hotel.whatsapp}`}
           target="_blank" 
           rel="noopener noreferrer"
           className="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-emerald-600 transition-transform hover:scale-105"
@@ -51,7 +52,7 @@ export function FloatingActions() {
           <MessageCircle className="w-6 h-6 fill-current" />
         </a>
         <a 
-          href="tel:+910000000000"
+          href={`tel:${hotel.phoneTel}`}
           className="w-12 h-12 bg-maroon-800 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-maroon-900 transition-transform hover:scale-105"
           aria-label="Call Hotel"
         >

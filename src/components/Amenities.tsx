@@ -1,21 +1,26 @@
 import React from 'react';
 import { Wind, Wifi, BedDouble, Droplets, UtensilsCrossed, Car, Users, Briefcase, KeyRound, Coffee, Tv, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function Amenities() {
   const amenitiesList = [
-    { icon: <Wind className="w-6 h-6" />, title: 'Air-Conditioned Rooms' },
-    { icon: <Wifi className="w-6 h-6" />, title: 'Free high-speed Wi-Fi' },
-    { icon: <BedDouble className="w-6 h-6" />, title: 'Comfortable Beds' },
-    { icon: <Droplets className="w-6 h-6" />, title: 'Clean & Hygienic Bathrooms' },
-    { icon: <UtensilsCrossed className="w-6 h-6" />, title: 'Room Service Available' },
-    { icon: <Car className="w-6 h-6" />, title: 'Parking Availability' },
-    { icon: <Users className="w-6 h-6" />, title: 'Family-Friendly Stay' },
-    { icon: <Briefcase className="w-6 h-6" />, title: 'Business Traveller Friendly' },
-    { icon: <KeyRound className="w-6 h-6" />, title: '24/7 Front Desk Assistance' },
-    { icon: <Coffee className="w-6 h-6" />, title: 'Hot Water Supply' },
-    { icon: <Tv className="w-6 h-6" />, title: 'Television / Entertainment' },
-    { icon: <Sparkles className="w-6 h-6" />, title: 'Daily Housekeeping' },
+    { icon: <Sparkles className="w-6 h-6" />, title: 'Spa' },
+    { icon: <UtensilsCrossed className="w-6 h-6" />, title: 'Restaurant' },
+    { icon: <Coffee className="w-6 h-6" />, title: 'Lounge & Bar' },
+    { icon: <Wifi className="w-6 h-6" />, title: 'Wi-Fi' },
+    { icon: <UtensilsCrossed className="w-6 h-6" />, title: 'Room Service' },
+    { icon: <Car className="w-6 h-6" />, title: 'Free Parking' },
+    { icon: <Wind className="w-6 h-6" />, title: 'Air Conditioning' },
+    { icon: <KeyRound className="w-6 h-6" />, title: 'Power Backup' },
+    { icon: <Users className="w-6 h-6" />, title: 'Concierge' },
+    { icon: <BedDouble className="w-6 h-6" />, title: 'Luggage Assistance' },
+    { icon: <Droplets className="w-6 h-6" />, title: 'Geyser / Hot Water' },
+    { icon: <Sparkles className="w-6 h-6" />, title: 'Housekeeping' },
+    { icon: <Tv className="w-6 h-6" />, title: 'TV' },
+    { icon: <Briefcase className="w-6 h-6" />, title: 'Business Centre' },
+    { icon: <Users className="w-6 h-6" />, title: 'Conference & Banquet' },
+    { icon: <Car className="w-6 h-6" />, title: 'Railway / Bus Transfers' },
   ];
 
   return (
@@ -23,7 +28,7 @@ export function Amenities() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Amenities & Facilities</h2>
-          <p className="text-gray-600">Everything you need for a comfortable, stress-free stay.</p>
+          <p className="text-gray-600">Listing amenities include {hotel.amenities.slice(0, 6).join(', ')}, and more guest services for a comfortable stay.</p>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

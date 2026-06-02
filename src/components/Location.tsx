@@ -1,16 +1,10 @@
 import React from 'react';
 import { MapPin, Navigation, Compass } from 'lucide-react';
 import { motion } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function Location() {
-  const highlights = [
-    'Ballari Fort',
-    'Local markets & shopping areas',
-    'Railway station & bus connectivity',
-    'Key business areas',
-    'Temples and local landmarks',
-    'Popular food spots'
-  ];
+  const highlights = hotel.landmarks;
 
   return (
     <section id="location" className="py-20 bg-gray-50 border-t border-gray-100">
@@ -21,7 +15,7 @@ export function Location() {
           <div className="lg:col-span-2 order-2 lg:order-1">
             <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Explore Ballari from Hotel Royal Fort</h2>
             <p className="text-gray-600 mb-8 leading-relaxed">
-              Situated conveniently in Ballari, our hotel provides easy connectivity to major transport hubs and local attractions, making it perfect for both sightseeing and business commitments.
+              Located on New Trunk Road near Siddartha Nagar, Hotel Royal Fort keeps guests close to Ballari Fort views, rail and bus connectivity, city services, and local dining.
             </p>
             
             <ul className="space-y-4 mb-8">
@@ -36,7 +30,7 @@ export function Location() {
             </ul>
 
             <a 
-              href="https://maps.app.goo.gl/vVGSAApmL79wqteK8" 
+              href={hotel.mapsUrl} 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-md font-medium hover:bg-black transition-colors shadow-sm"
@@ -54,7 +48,7 @@ export function Location() {
             className="lg:col-span-3 order-1 lg:order-2 h-[400px] lg:h-[500px] w-full bg-gray-200 rounded-2xl overflow-hidden relative shadow-lg border border-gray-100"
           >
             <iframe 
-               src="https://maps.google.com/maps?q=Hotel%20Royal%20Fort%20Bellary&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+               src={hotel.mapEmbedUrl} 
                width="100%" 
                height="100%"
                style={{border: 0}}

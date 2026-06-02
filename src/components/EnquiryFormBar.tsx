@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Users, Home, Phone, Send, MessageCircle } from 'lucide-react';
+import { hotel } from '../data/hotel';
 
 export function EnquiryFormBar() {
   const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ export function EnquiryFormBar() {
     checkIn: '',
     checkOut: '',
     guests: '1',
-    roomType: 'Standard Room'
+    roomType: hotel.roomTypes[0]
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -32,7 +33,7 @@ export function EnquiryFormBar() {
                 <h2 className="font-serif text-2xl font-bold text-gray-900">Check Availability & Enquire</h2>
                 <p className="text-gray-500 text-sm mt-1">Get the best rates by booking directly with us.</p>
              </div>
-             <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium text-emerald-700 bg-emerald-50 px-4 py-2 rounded-md hover:bg-emerald-100 transition-colors">
+             <a href={`https://wa.me/${hotel.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium text-emerald-700 bg-emerald-50 px-4 py-2 rounded-md hover:bg-emerald-100 transition-colors">
                 <MessageCircle className="w-4 h-4" />
                 Prefer WhatsApp?
              </a>
@@ -109,9 +110,9 @@ export function EnquiryFormBar() {
                   onChange={handleChange}
                   className="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-maroon-800 focus:border-maroon-800 outline-none transition-all text-sm appearance-none"
                 >
-                  <option>Standard Room</option>
-                  <option>Deluxe Room</option>
-                  <option>Family Room</option>
+                  {hotel.roomTypes.map((room) => (
+                    <option key={room}>{room}</option>
+                  ))}
                 </select>
               </div>
             </div>

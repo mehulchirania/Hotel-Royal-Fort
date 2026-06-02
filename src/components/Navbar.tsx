@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, MessageCircle, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -61,15 +62,15 @@ export function Navbar() {
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center space-x-3">
-             <a href="#contact" className="hidden xl:flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-maroon-800">
+             <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer" className="hidden xl:flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-maroon-800">
                 <MapPin className="w-4 h-4 text-maroon-700" />
                 Directions
              </a>
-             <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-3 py-2 rounded-md transition-colors">
+             <a href={`https://wa.me/${hotel.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-3 py-2 rounded-md transition-colors">
                 <MessageCircle className="w-4 h-4" />
                 WhatsApp
              </a>
-             <a href="tel:+910000000000" className="flex items-center gap-1.5 bg-maroon-800 text-white px-4 py-2 text-sm font-medium rounded-md hover:bg-maroon-700 transition-colors shadow-sm">
+             <a href={`tel:${hotel.phoneTel}`} className="flex items-center gap-1.5 bg-maroon-800 text-white px-4 py-2 text-sm font-medium rounded-md hover:bg-maroon-700 transition-colors shadow-sm">
                 <Phone className="w-4 h-4" />
                 Call Now
              </a>
@@ -114,15 +115,15 @@ export function Navbar() {
                 </a>
               ))}
               <div className="mt-6 space-y-3 px-3">
-                <a href="tel:+910000000000" className="w-full flex items-center justify-center gap-2 bg-maroon-800 text-white px-4 py-3 text-base font-medium rounded-md shadow-sm">
+                <a href={`tel:${hotel.phoneTel}`} className="w-full flex items-center justify-center gap-2 bg-maroon-800 text-white px-4 py-3 text-base font-medium rounded-md shadow-sm">
                   <Phone className="w-5 h-5" />
                   Call Now
                 </a>
-                <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-3 text-base font-medium rounded-md">
+                <a href={`https://wa.me/${hotel.whatsapp}`} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-3 text-base font-medium rounded-md">
                   <MessageCircle className="w-5 h-5" />
                   WhatsApp Enquiry
                 </a>
-                 <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-center gap-2 border border-gray-300 text-gray-700 px-4 py-3 text-base font-medium rounded-md">
+                 <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer" onClick={() => setMobileMenuOpen(false)} className="w-full flex items-center justify-center gap-2 border border-gray-300 text-gray-700 px-4 py-3 text-base font-medium rounded-md">
                   <MapPin className="w-5 h-5" />
                   Get Directions
                 </a>

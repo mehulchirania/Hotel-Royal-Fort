@@ -1,22 +1,23 @@
 import React from 'react';
 import { Wifi, Wind, Tv, Coffee, Bath, BedDouble, ChevronRight } from 'lucide-react';
 import { motion } from 'motion/react';
+import { hotel } from '../data/hotel';
 
 export function Rooms() {
   const rooms = [
     {
-      title: 'Standard Room',
-      description: 'Ideal for solo travellers and short stays. Clean, practical, and highly comfortable.',
+      title: 'Chief AC Room',
+      description: 'A practical air-conditioned room for solo travellers and short stays, with clean essentials and easy service access.',
       image: 'https://images.unsplash.com/photo-1618773928120-2e1cb1120025?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     },
     {
-      title: 'Deluxe Room',
-      description: 'Spacious option for couples, families, and business guests looking for extra comfort.',
+      title: 'King Suite',
+      description: 'A roomier suite option for couples and business guests looking for extra comfort during a Ballari stay.',
       image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     },
     {
-      title: 'Family Room / Suite',
-      description: 'Suitable for families or groups needing more space and convenience during their stay.',
+      title: 'Queen / Viceroy Suite',
+      description: 'Suitable for families or groups needing more space, convenient amenities, and a longer-stay setup.',
       image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     }
   ];
@@ -35,7 +36,7 @@ export function Rooms() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Rooms Designed for Comfort</h2>
-          <p className="text-gray-600">Experience a peaceful night's rest in our well-appointed rooms, featuring all necessary modern amenities for a pleasant stay in Ballari.</p>
+          <p className="text-gray-600">Choose from {hotel.roomTypes.join(', ')} with AC comfort, in-room essentials, and direct hotel booking support.</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
