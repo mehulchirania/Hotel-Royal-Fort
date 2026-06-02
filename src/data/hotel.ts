@@ -7,8 +7,9 @@ export const hotel = {
   phoneTel: '+917259758888',
   whatsapp: '917259758888',
   email: 'gmroyalfort@gmail.com',
-  rating: '3.9',
-  reviewCount: '4,872',
+  rating: '4.0',
+  reviewCount: '5,712',
+  category: '3-star hotel',
   coordinates: {
     lat: 15.148273,
     lng: 76.904129,

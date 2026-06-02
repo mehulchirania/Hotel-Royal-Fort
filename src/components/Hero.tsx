@@ -62,7 +62,11 @@ export function Hero() {
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>{hotel.rating} on Google</span>
+                <span>{hotel.rating} Google Rating</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>{hotel.category}</span>
               </div>
             </div>
             
