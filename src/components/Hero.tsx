@@ -5,7 +5,7 @@ import { hotel } from '../data/hotel';
 
 export function Hero() {
   return (
-    <section id="home" className="relative pt-24 pb-12 lg:pt-32 lg:pb-20 overflow-hidden bg-white">
+    <section id="home" className="relative pt-8 pb-12 lg:pt-14 lg:pb-20 overflow-hidden bg-white">
       {/* Background abstract element */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-maroon-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
       

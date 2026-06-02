@@ -64,9 +64,23 @@ app.post('/api/enquiry', async (req, res) => {
   }
 });
 
-app.use(express.static(distDir));
+// Hashed assets (JS/CSS) — safe to cache for a year since filenames change on each build
+app.use('/assets', express.static(path.join(distDir, 'assets'), {
+  maxAge: '1y',
+  immutable: true,
+}));
 
+// Other static files (images, favicon, etc.) — short cache
+app.use(express.static(distDir, {
+  index: false, // Let the catch-all below serve index.html with no-cache headers
+  maxAge: '1h',
+}));
+
+// SPA entry point — must never be cached so the browser always gets the latest index.html
 app.get('*', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.sendFile(path.join(distDir, 'index.html'));
 });
 
