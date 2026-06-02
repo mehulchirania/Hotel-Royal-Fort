@@ -2,8 +2,10 @@ import React from 'react';
 import { ExternalLink, Wifi, Wind, Tv, Coffee, Bath, BedDouble } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
+import { useNav } from '../context/nav';
 
 export function Rooms() {
+  const { navigate } = useNav();
   const rooms = [
     {
       title: 'Chief AC Room',
@@ -92,15 +94,25 @@ export function Rooms() {
                   ))}
                 </div>
                 
-                <a 
-                  href={room.directBooking ? '#quick-enquiry' : hotel.goibiboUrl}
-                  target={room.directBooking ? undefined : '_blank'}
-                  rel={room.directBooking ? undefined : 'noopener noreferrer'}
-                  className="w-full py-3 px-4 bg-maroon-50 text-maroon-800 font-semibold rounded-md border border-maroon-100 flex items-center justify-center gap-2 hover:bg-maroon-800 hover:text-white transition-colors group/btn"
-                >
-                  {room.directBooking ? 'Enquire for Suite Room' : 'Book on Goibibo'}
-                  <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                </a>
+                {room.directBooking ? (
+                  <button
+                    onClick={() => navigate('contact')}
+                    className="w-full py-3 px-4 bg-maroon-50 text-maroon-800 font-semibold rounded-md border border-maroon-100 flex items-center justify-center gap-2 hover:bg-maroon-800 hover:text-white transition-colors group/btn"
+                  >
+                    Enquire for Suite Room
+                    <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                  </button>
+                ) : (
+                  <a
+                    href={hotel.goibiboUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3 px-4 bg-maroon-50 text-maroon-800 font-semibold rounded-md border border-maroon-100 flex items-center justify-center gap-2 hover:bg-maroon-800 hover:text-white transition-colors group/btn"
+                  >
+                    Book on Goibibo
+                    <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                  </a>
+                )}
               </div>
             </motion.div>
           ))}

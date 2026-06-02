@@ -2,6 +2,7 @@ import React from 'react';
 import { Building2, CalendarCheck, Trees, Users } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
+import { useNav } from '../context/nav';
 
 const icons = [
   <Building2 className="w-6 h-6" />,
@@ -10,6 +11,7 @@ const icons = [
 ];
 
 export function Events() {
+  const { navigate } = useNav();
   return (
     <section id="events" className="py-20 bg-white border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,12 +54,12 @@ export function Events() {
               ))}
             </div>
 
-            <a
-              href="#quick-enquiry"
+            <button
+              onClick={() => navigate('contact')}
               className="inline-flex items-center justify-center mt-8 bg-maroon-800 text-white px-7 py-3 rounded-md font-medium hover:bg-maroon-700 transition-colors shadow-sm"
             >
               Enquire for Event Booking
-            </a>
+            </button>
           </motion.div>
 
           <motion.div

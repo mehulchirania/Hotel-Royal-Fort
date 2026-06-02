@@ -2,8 +2,10 @@ import React from 'react';
 import { ShieldCheck, Map, HeartHandshake } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
+import { useNav } from '../context/nav';
 
 export function About() {
+  const { navigate } = useNav();
   const features = [
     {
       icon: <ShieldCheck className="w-8 h-8 text-gold-500" />,
@@ -57,9 +59,9 @@ export function About() {
               ))}
             </div>
             
-            <a href="#quick-enquiry" className="inline-block border-2 border-maroon-800 text-maroon-800 font-medium px-8 py-3 rounded-md hover:bg-maroon-800 hover:text-white transition-colors">
+            <button onClick={() => navigate('contact')} className="inline-block border-2 border-maroon-800 text-maroon-800 font-medium px-8 py-3 rounded-md hover:bg-maroon-800 hover:text-white transition-colors">
                Contact Us Today
-            </a>
+            </button>
           </motion.div>
 
           <motion.div 
