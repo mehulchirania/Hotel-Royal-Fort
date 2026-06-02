@@ -30,7 +30,7 @@ export const hotel = {
     'Near Hotel Pola Paradise and Siddartha Nagar',
     'Local restaurants, markets, and city services close by',
   ],
-  roomTypes: ['Chief AC Room', 'Deluxe AC Room'],
+  roomTypes: ['Chief AC Room', 'Deluxe AC Room', 'Suite Room'],
   goibiboRates: [
     {
       room: 'Chief AC Room',
@@ -60,6 +60,27 @@ export const hotel = {
       taxes: '+ ₹456 taxes & fees',
       originalPrice: '₹3,800',
     },
+    {
+      room: 'Suite Room',
+      plan: 'Direct hotel tariff',
+      displayPrice: 'Rs. 5,500',
+      taxes: '+ taxes',
+      originalPrice: '',
+    },
+  ],
+  eventSpaces: [
+    {
+      title: '3 Banquet Halls',
+      description: 'Flexible indoor event spaces for weddings, receptions, meetings, private functions, and corporate gatherings.',
+    },
+    {
+      title: 'Outdoor Event Area',
+      description: 'Additional open-air area available with banquet bookings for guest flow, dining setups, or larger celebrations.',
+    },
+    {
+      title: 'Event Booking Support',
+      description: 'Contact the hotel team for hall availability, seating layouts, menus, decoration support, and custom packages.',
+    },
   ],
   amenities: [
     'Spa',
@@ -86,5 +107,7 @@ export const hotel = {
     'Fire extinguishers',
     'Business centre',
     'Conference room and banquet',
+    '3 banquet halls',
+    'Outdoor event area',
   ],
 };

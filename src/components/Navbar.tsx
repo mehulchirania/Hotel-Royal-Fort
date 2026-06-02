@@ -19,6 +19,7 @@ export function Navbar() {
     { name: 'Home', href: '#home' },
     { name: 'Rooms', href: '#rooms' },
     { name: 'Amenities', href: '#amenities' },
+    { name: 'Events', href: '#events' },
     { name: 'Gallery', href: '#gallery' },
     { name: 'Dining', href: '#dining' },
     { name: 'Location', href: '#location' },

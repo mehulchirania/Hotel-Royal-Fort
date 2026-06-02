@@ -15,6 +15,12 @@ export function Rooms() {
       description: 'A roomier air-conditioned option for couples and business guests looking for extra comfort during a Ballari stay.',
       image: '/images/hotel-room.png',
     },
+    {
+      title: 'Suite Room',
+      description: 'A premium suite option for guests who want extra room, comfort, and privacy during their stay.',
+      image: '/images/hotel-room.png',
+      directBooking: true,
+    },
   ];
 
   const amenities = [
@@ -64,7 +70,9 @@ export function Rooms() {
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{rate.plan}</p>
-                          <p className="text-xs text-gray-500 line-through mt-1">{rate.originalPrice}</p>
+                          {rate.originalPrice && (
+                            <p className="text-xs text-gray-500 line-through mt-1">{rate.originalPrice}</p>
+                          )}
                         </div>
                         <div className="text-right">
                           <p className="text-xl font-bold text-maroon-800">{rate.displayPrice}</p>
@@ -85,12 +93,12 @@ export function Rooms() {
                 </div>
                 
                 <a 
-                  href={hotel.goibiboUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={room.directBooking ? '#quick-enquiry' : hotel.goibiboUrl}
+                  target={room.directBooking ? undefined : '_blank'}
+                  rel={room.directBooking ? undefined : 'noopener noreferrer'}
                   className="w-full py-3 px-4 bg-maroon-50 text-maroon-800 font-semibold rounded-md border border-maroon-100 flex items-center justify-center gap-2 hover:bg-maroon-800 hover:text-white transition-colors group/btn"
                 >
-                  Book on Goibibo
+                  {room.directBooking ? 'Enquire for Suite Room' : 'Book on Goibibo'}
                   <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                 </a>
               </div>
@@ -98,7 +106,7 @@ export function Rooms() {
           ))}
         </div>
         <p className="text-center text-xs text-gray-500 mt-8">
-          Prices are shown from the Goibibo listing and can change by date, occupancy, taxes, and offers.
+          Goibibo prices can change by date, occupancy, taxes, and offers. Suite tariff is listed as Rs. 5,500 + taxes for direct enquiries.
         </p>
       </div>
     </section>

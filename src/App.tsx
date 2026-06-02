@@ -5,6 +5,7 @@ import { EnquiryFormBar } from './components/EnquiryFormBar';
 import { About } from './components/About';
 import { Rooms } from './components/Rooms';
 import { Amenities } from './components/Amenities';
+import { Events } from './components/Events';
 import { Dining } from './components/Dining';
 import { Gallery } from './components/Gallery';
 import { Features } from './components/Features';
@@ -24,6 +25,7 @@ export default function App() {
         <About />
         <Rooms />
         <Amenities />
+        <Events />
         <Dining />
         <Gallery />
         <Features />

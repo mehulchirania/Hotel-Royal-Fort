@@ -19,7 +19,8 @@ export function Amenities() {
     { icon: <Sparkles className="w-6 h-6" />, title: 'Housekeeping' },
     { icon: <Tv className="w-6 h-6" />, title: 'TV' },
     { icon: <Briefcase className="w-6 h-6" />, title: 'Business Centre' },
-    { icon: <Users className="w-6 h-6" />, title: 'Conference & Banquet' },
+    { icon: <Users className="w-6 h-6" />, title: '3 Banquet Halls' },
+    { icon: <Sparkles className="w-6 h-6" />, title: 'Outdoor Event Area' },
     { icon: <Car className="w-6 h-6" />, title: 'Railway / Bus Transfers' },
   ];
 

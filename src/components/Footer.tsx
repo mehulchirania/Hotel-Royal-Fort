@@ -19,7 +19,7 @@ export function Footer() {
               </div>
             </div>
             <p className="text-sm mb-6 leading-relaxed max-w-xs">
-              Comfortable rooms and suites on New Trunk Road in Ballari, with restaurant, lounge, parking, and direct booking support.
+              Comfortable rooms, suite stays, banquet halls, and outdoor event space on New Trunk Road in Ballari.
             </p>
             <div className="flex items-center gap-3">
               <a href="#" className="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center hover:bg-maroon-800 hover:text-white transition-colors">
@@ -40,6 +40,7 @@ export function Footer() {
               <li><a href="#home" className="hover:text-gold-400 transition-colors">Home</a></li>
               <li><a href="#rooms" className="hover:text-gold-400 transition-colors">Rooms & Tariffs</a></li>
               <li><a href="#amenities" className="hover:text-gold-400 transition-colors">Amenities</a></li>
+              <li><a href="#events" className="hover:text-gold-400 transition-colors">Events & Banquets</a></li>
               <li><a href="#gallery" className="hover:text-gold-400 transition-colors">Gallery</a></li>
               <li><a href="#contact" className="hover:text-gold-400 transition-colors">Contact Us</a></li>
             </ul>
