@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  
+  --color-maroon-50: #fdf5f5;
+  --color-maroon-100: #fae8e8;
+  --color-maroon-500: #BA1A1A;
+  --color-maroon-600: #931414;
+  --color-maroon-700: #710e0e;
+  --color-maroon-800: #550a0a;
+  --color-maroon-900: #3c0707;
+  
+  --color-gold-400: #d4af37;
+  --color-gold-500: #c5a017;
+  --color-gold-600: #a78712;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.bg-maroon-900 {
+  background-color: var(--color-maroon-900);
+}
+.text-maroon-800 {
+  color: var(--color-maroon-800);
+}
+.text-gold-500 {
+  color: var(--color-gold-500);
+}
+.bg-gold-500 {
+  background-color: var(--color-gold-500);
+}
+.hover\:bg-maroon-800:hover {
+  background-color: var(--color-maroon-800);
+}
+.hover\:bg-gold-600:hover {
+  background-color: var(--color-gold-600);
+}
+.hover\:bg-maroon-700:hover {
+  background-color: var(--color-maroon-700);
+}
+.text-maroon-600 {
+  color: var(--color-maroon-600);
+}
+.bg-maroon-600 {
+  background-color: var(--color-maroon-600);
+}
+.bg-maroon-800 {
+  background-color: var(--color-maroon-800);
+}
+.border-maroon-800 {
+  border-color: var(--color-maroon-800);
+}
+.text-maroon-900 {
+  color: var(--color-maroon-900);
+}
+.border-gold-500 {
+  border-color: var(--color-gold-500);
+}
+.bg-maroon-50 {
+  background-color: var(--color-maroon-50);
+}
+.text-maroon-700 {
+  color: var(--color-maroon-700);
+}
+

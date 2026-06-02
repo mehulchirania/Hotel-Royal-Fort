@@ -1,0 +1,6 @@
+{
+  "name": "Hotel Royal Fort",
+  "description": "Hotel Royal Fort in Ballari offers clean rooms, warm hospitality, convenient location access, and comfortable stays for families, business travellers, and visitors to Bellary.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
