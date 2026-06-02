@@ -39,11 +39,11 @@ export function Hero() {
             </p>
             
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10">
-              <a href="#quick-enquiry" className="bg-maroon-800 text-white px-8 py-3.5 rounded-md font-medium shadow-md hover:bg-maroon-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
-                Book / Enquire Now
+              <a href={hotel.goibiboUrl} target="_blank" rel="noopener noreferrer" className="bg-maroon-800 text-white px-8 py-3.5 rounded-md font-medium shadow-md hover:bg-maroon-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                Book on Goibibo
               </a>
-              <a href="#rooms" className="text-maroon-800 bg-maroon-50 px-8 py-3.5 rounded-md font-medium hover:bg-maroon-100 transition-colors border border-maroon-100">
-                View Rooms
+              <a href="#quick-enquiry" className="text-maroon-800 bg-maroon-50 px-8 py-3.5 rounded-md font-medium hover:bg-maroon-100 transition-colors border border-maroon-100">
+                Send Enquiry
               </a>
             </div>
 

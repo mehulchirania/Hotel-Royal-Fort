@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Phone, Mail, MapPin, MessageCircle, Send } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
+import { submitEnquiry } from '../lib/enquiry';
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -12,14 +13,37 @@ export function Contact() {
     checkOut: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Thank you for getting in touch. Our team will contact you shortly.');
+    setIsSubmitting(true);
+    setStatusMessage('');
+
+    try {
+      await submitEnquiry({
+        source: 'Contact form enquiry',
+        ...formData,
+      });
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        checkIn: '',
+        checkOut: '',
+        message: '',
+      });
+      setStatusMessage('Thank you for getting in touch. Our team will contact you shortly.');
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : 'Unable to send enquiry right now.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -128,10 +152,13 @@ export function Contact() {
                 <textarea name="message" rows={3} value={formData.message} onChange={handleChange} className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-md focus:ring-2 focus:ring-maroon-800 outline-none text-sm transition-all resize-none"></textarea>
               </div>
               
-              <button type="submit" className="w-full bg-maroon-800 text-white font-medium py-3 rounded-md flex items-center justify-center gap-2 hover:bg-maroon-700 transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-maroon-800 mt-2">
+              <button type="submit" disabled={isSubmitting} className="w-full bg-maroon-800 text-white font-medium py-3 rounded-md flex items-center justify-center gap-2 hover:bg-maroon-700 transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-maroon-800 mt-2 disabled:opacity-70 disabled:cursor-not-allowed">
                 <Send className="w-4 h-4" />
-                Submit Enquiry
+                {isSubmitting ? 'Sending...' : 'Submit Enquiry'}
               </button>
+              {statusMessage && (
+                <p className="text-sm font-medium text-gray-700">{statusMessage}</p>
+              )}
             </form>
           </motion.div>
           

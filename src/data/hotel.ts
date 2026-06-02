@@ -18,6 +18,8 @@ export const hotel = {
   shortAddress: 'New Trunk Road, behind Hotel Pola Paradise, Ballari',
   mapsUrl:
     'https://www.google.com/maps/place/Hotel+Royal+Fort/@15.1482782,76.9015541,17z/data=!3m1!4b1!4m10!3m9!1s0x3bb713c50801550d:0x90a32d2b50c8036a!5m3!1s2026-06-06!4m1!1i2!8m2!3d15.148273!4d76.904129!16s%2Fg%2F1pp2tyhbh?entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D',
+  goibiboUrl:
+    'https://www.goibibo.com/hotels/hotel-details/?checkin=20260606&checkout=20260607&roomString=1-2-0&searchText=Hotel%20Royal%20Fort&locusId=CTBELL&locusType=city&cityCode=CTBELL&cc=IN&_uCurrency=INR&vcid=CTBELL&giHotelId=3415246453017752306&mmtId=20130416155141839&topHtlId=20130416155141839&sType=hotel',
   mapEmbedUrl:
     'https://maps.google.com/maps?q=15.148273,76.904129%20(Hotel%20Royal%20Fort%2C%20Ballari)&z=16&output=embed',
   landmarks: [
@@ -28,7 +30,37 @@ export const hotel = {
     'Near Hotel Pola Paradise and Siddartha Nagar',
     'Local restaurants, markets, and city services close by',
   ],
-  roomTypes: ['Chief AC Room', 'King Suite', 'Queen Suite', 'Viceroy Suite'],
+  roomTypes: ['Chief AC Room', 'Deluxe AC Room'],
+  goibiboRates: [
+    {
+      room: 'Chief AC Room',
+      plan: 'Room Only | Free Cancellation',
+      displayPrice: '₹2,524',
+      taxes: '+ ₹372 taxes & fees',
+      originalPrice: '₹3,100',
+    },
+    {
+      room: 'Chief AC Room',
+      plan: 'Free Breakfast | Free Cancellation',
+      displayPrice: '₹2,768',
+      taxes: '+ ₹408 taxes & fees',
+      originalPrice: '₹3,400',
+    },
+    {
+      room: 'Deluxe AC Room',
+      plan: 'Room Only | Free Cancellation',
+      displayPrice: '₹2,849',
+      taxes: '+ ₹420 taxes & fees',
+      originalPrice: '₹3,500',
+    },
+    {
+      room: 'Deluxe AC Room',
+      plan: 'Free Breakfast | Free Cancellation',
+      displayPrice: '₹3,094',
+      taxes: '+ ₹456 taxes & fees',
+      originalPrice: '₹3,800',
+    },
+  ],
   amenities: [
     'Spa',
     'Restaurant',

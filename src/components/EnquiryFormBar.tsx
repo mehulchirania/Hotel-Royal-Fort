@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Users, Home, Phone, Send, MessageCircle } from 'lucide-react';
 import { hotel } from '../data/hotel';
+import { submitEnquiry } from '../lib/enquiry';
 
 export function EnquiryFormBar() {
   const [formData, setFormData] = useState({
@@ -11,16 +12,37 @@ export function EnquiryFormBar() {
     guests: '1',
     roomType: hotel.roomTypes[0]
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Placeholder for actual submission logic
-    console.log('Form submitted:', formData);
-    alert('Thank you for your enquiry. We will contact you shortly.');
+    setIsSubmitting(true);
+    setStatusMessage('');
+
+    try {
+      await submitEnquiry({
+        source: 'Quick availability enquiry',
+        ...formData,
+      });
+      setFormData({
+        name: '',
+        phone: '',
+        checkIn: '',
+        checkOut: '',
+        guests: '1',
+        roomType: hotel.roomTypes[0],
+      });
+      setStatusMessage('Thank you for your enquiry. We will contact you shortly.');
+    } catch (error) {
+      setStatusMessage(error instanceof Error ? error.message : 'Unable to send enquiry right now.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -120,14 +142,18 @@ export function EnquiryFormBar() {
             <div className="relative col-span-1 md:col-span-2 lg:col-span-1 flex items-end">
               <button 
                 type="submit" 
-                className="w-full bg-maroon-800 text-white flex items-center justify-center gap-2 py-2.5 px-4 rounded-md font-medium hover:bg-maroon-700 transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-maroon-800 h-[42px]"
+                disabled={isSubmitting}
+                className="w-full bg-maroon-800 text-white flex items-center justify-center gap-2 py-2.5 px-4 rounded-md font-medium hover:bg-maroon-700 transition-colors shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-maroon-800 h-[42px] disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <Send className="w-4 h-4" />
-                Send Enquiry
+                {isSubmitting ? 'Sending...' : 'Send Enquiry'}
               </button>
             </div>
             
           </form>
+          {statusMessage && (
+            <p className="mt-4 text-sm font-medium text-gray-700">{statusMessage}</p>
+          )}
         </div>
       </div>
     </section>

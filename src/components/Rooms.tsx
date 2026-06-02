@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wifi, Wind, Tv, Coffee, Bath, BedDouble, ChevronRight } from 'lucide-react';
+import { ExternalLink, Wifi, Wind, Tv, Coffee, Bath, BedDouble } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
 
@@ -11,15 +11,10 @@ export function Rooms() {
       image: 'https://images.unsplash.com/photo-1618773928120-2e1cb1120025?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     },
     {
-      title: 'King Suite',
-      description: 'A roomier suite option for couples and business guests looking for extra comfort during a Ballari stay.',
+      title: 'Deluxe AC Room',
+      description: 'A roomier air-conditioned option for couples and business guests looking for extra comfort during a Ballari stay.',
       image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     },
-    {
-      title: 'Queen / Viceroy Suite',
-      description: 'Suitable for families or groups needing more space, convenient amenities, and a longer-stay setup.',
-      image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    }
   ];
 
   const amenities = [
@@ -36,7 +31,7 @@ export function Rooms() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Rooms Designed for Comfort</h2>
-          <p className="text-gray-600">Choose from {hotel.roomTypes.join(', ')} with AC comfort, in-room essentials, and direct hotel booking support.</p>
+          <p className="text-gray-600">Choose from {hotel.roomTypes.join(', ')} with AC comfort, in-room essentials, and Goibibo booking support.</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -56,13 +51,29 @@ export function Rooms() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-semibold uppercase tracking-wider text-maroon-800 rounded-full shadow-sm">
-                  Contact hotel for latest tariff
+                  Goibibo live booking
                 </div>
               </div>
               
               <div className="p-6 flex flex-col flex-grow">
                 <h3 className="font-serif text-2xl font-bold text-gray-900 mb-2">{room.title}</h3>
                 <p className="text-gray-600 mb-6 flex-grow">{room.description}</p>
+                <div className="mb-6 space-y-3">
+                  {hotel.goibiboRates.filter((rate) => rate.room === room.title).map((rate) => (
+                    <div key={`${rate.room}-${rate.plan}`} className="bg-gray-50 border border-gray-100 rounded-lg p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{rate.plan}</p>
+                          <p className="text-xs text-gray-500 line-through mt-1">{rate.originalPrice}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xl font-bold text-maroon-800">{rate.displayPrice}</p>
+                          <p className="text-xs text-gray-500">{rate.taxes}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
                 
                 <div className="grid grid-cols-2 gap-y-3 gap-x-2 mb-8 pt-6 border-t border-gray-100">
                   {amenities.map((item, i) => (
@@ -74,16 +85,21 @@ export function Rooms() {
                 </div>
                 
                 <a 
-                  href="#quick-enquiry" 
+                  href={hotel.goibiboUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full py-3 px-4 bg-maroon-50 text-maroon-800 font-semibold rounded-md border border-maroon-100 flex items-center justify-center gap-2 hover:bg-maroon-800 hover:text-white transition-colors group/btn"
                 >
-                  Enquire About This Room
-                  <ChevronRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+                  Book on Goibibo
+                  <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                 </a>
               </div>
             </motion.div>
           ))}
         </div>
+        <p className="text-center text-xs text-gray-500 mt-8">
+          Prices are shown from the Goibibo listing and can change by date, occupancy, taxes, and offers.
+        </p>
       </div>
     </section>
   );
