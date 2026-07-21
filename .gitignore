@@ -2,7 +2,9 @@ node_modules/
 build/
 dist/
 coverage/
-data/
+# Leading slash matters: a bare "data/" also matches src/data/, which silently
+# excluded application source. This is only the runtime engagement CSV folder.
+/data/
 .DS_Store
 *.log
 .env*
