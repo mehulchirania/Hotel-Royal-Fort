@@ -3,6 +3,7 @@ import { Building2, CalendarCheck, Trees, Users } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
 import { useNav } from '../context/nav';
+import { Img } from './Img';
 
 const icons = [
   <Building2 className="w-6 h-6" />,
@@ -69,9 +70,10 @@ export function Events() {
             transition={{ duration: 0.6 }}
             className="relative rounded-2xl overflow-hidden shadow-xl border border-gray-100"
           >
-            <img
-              src="/images/hotel-lobby-dining.png"
+            <Img
+              name="hotel-lobby-dining"
               alt="Hotel Royal Fort banquet and event space"
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className="w-full h-full object-cover aspect-[4/3]"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-gray-950/80 to-transparent p-6 text-white">

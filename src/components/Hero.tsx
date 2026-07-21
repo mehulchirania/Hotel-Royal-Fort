@@ -1,9 +1,13 @@
 import React from 'react';
-import { Phone, MessageCircle, MapPin, CheckCircle2 } from 'lucide-react';
+import { Phone, MessageCircle, MapPin, CheckCircle2, Star } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
+import { useNav } from '../context/nav';
+import { Img } from './Img';
 
 export function Hero() {
+  const { navigate } = useNav();
+
   return (
     <section id="home" className="relative pt-8 pb-12 lg:pt-14 lg:pb-20 overflow-hidden bg-white">
       {/* Background abstract element */}
@@ -45,6 +49,29 @@ export function Hero() {
               <a href="#quick-enquiry" className="text-maroon-800 bg-maroon-50 px-8 py-3.5 rounded-md font-medium hover:bg-maroon-100 transition-colors border border-maroon-100">
                 Send Enquiry
               </a>
+              {/* Social proof, not a third CTA — reads as a quiet link so the
+                  two booking actions above keep the visual weight. */}
+              <button
+                onClick={() => navigate('reviews')}
+                className="group flex items-center gap-2.5 px-3 py-2 -mx-1 rounded-md text-gray-600 hover:text-maroon-800 hover:bg-maroon-50 transition-colors"
+                title="View guest reviews"
+              >
+                <span className="flex items-center gap-0.5 text-gold-500">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <Star
+                      key={i}
+                      className={`w-3.5 h-3.5 ${i < Math.round(Number(hotel.rating)) ? 'fill-current' : 'opacity-30'}`}
+                    />
+                  ))}
+                </span>
+                <span className="text-sm">
+                  <span className="font-bold text-gray-900">{hotel.rating}</span>
+                  <span aria-hidden="true" className="text-gray-400 mx-1.5">·</span>
+                  <span className="font-medium underline decoration-transparent group-hover:decoration-current underline-offset-4 transition-colors">
+                    {hotel.reviewCount} reviews
+                  </span>
+                </span>
+              </button>
             </div>
 
             <div className="flex flex-wrap justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-gray-600 font-medium">
@@ -59,10 +86,6 @@ export function Hero() {
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                 <span>Restaurant & Lounge</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                <span>{hotel.rating} Google Rating</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" />
@@ -102,12 +125,21 @@ export function Hero() {
              className="flex-1 w-full"
           >
             <div className="relative aspect-[4/3] lg:aspect-[3/4] w-full rounded-2xl overflow-hidden shadow-2xl">
-              <img 
-                src="/images/hotel-exterior.png" 
-                alt="Hotel Royal Fort Exterior and Reception" 
+              <Img
+                name="hotel-exterior"
+                alt="Hotel Royal Fort Exterior and Reception"
+                priority
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent pointer-events-none" />
+              
+              {/* Badge overlaid directly on image corner */}
+              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3.5 py-2 rounded-xl shadow-lg border border-white/40 flex items-center gap-2">
+                <Star className="w-4 h-4 text-gold-500 fill-current" />
+                <span className="font-bold text-xs text-gray-900">{hotel.rating} Google Rating</span>
+              </div>
+
               <div className="absolute bottom-6 left-6 text-white pointer-events-none">
                  <p className="font-serif text-2xl font-medium">Hotel Royal Fort</p>
                  <p className="text-sm opacity-90 flex items-center gap-1 mt-1">
@@ -116,22 +148,6 @@ export function Hero() {
                  </p>
               </div>
             </div>
-            
-            {/* Floating badge */}
-            <div className="absolute top-1/2 -left-6 md:-left-10 bg-white p-4 rounded-xl shadow-xl border border-gray-100 hidden sm:block animate-bounce" style={{ animationDuration: '3s' }}>
-               <div className="flex items-center gap-3">
-                 <div className="bg-gold-50 w-12 h-12 rounded-full flex items-center justify-center text-gold-600">
-                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                   </svg>
-                 </div>
-                 <div>
-                   <p className="text-sm font-bold text-gray-900">{hotel.rating} Rating</p>
-                   <p className="text-xs text-gray-500">{hotel.reviewCount} Google reviews</p>
-                 </div>
-               </div>
-            </div>
-            
           </motion.div>
           
         </div>

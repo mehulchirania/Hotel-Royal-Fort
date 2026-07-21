@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
-  
+
   --color-maroon-50: #fdf5f5;
   --color-maroon-100: #fae8e8;
   --color-maroon-500: #BA1A1A;
@@ -12,10 +14,61 @@
   --color-maroon-700: #710e0e;
   --color-maroon-800: #550a0a;
   --color-maroon-900: #3c0707;
-  
+
   --color-gold-400: #d4af37;
   --color-gold-500: #c5a017;
   --color-gold-600: #a78712;
+}
+
+/* ---------------------------------------------------------------
+   Semantic surface tokens.
+   Light: warm off-white paper. Dark: warm ink, never cold slate —
+   a blue-grey dark mode fights the maroon/gold brand.
+   --------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  --surface-page: #f7f6f4;
+  --surface-card: #ffffff;
+  --surface-raised: #f1efec;
+
+  --ink-strong: #1a1614;
+  --ink: #3d3733;
+  --ink-muted: #6b625c;
+  --ink-faint: #948a83;
+
+  --line: #e6e2dd;
+  --line-strong: #d5cfc8;
+
+  --brand: var(--color-maroon-800);
+  --brand-hover: var(--color-maroon-700);
+  --brand-tint: #fdf5f5;
+  --brand-tint-line: #fae8e8;
+  --accent: var(--color-gold-500);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --surface-page: #16130f;
+  --surface-card: #1e1a16;
+  --surface-raised: #272220;
+
+  --ink-strong: #f7f3ee;
+  --ink: #e2dad2;
+  --ink-muted: #a89e95;
+  --ink-faint: #8f857c;
+
+  --line: #332c28;
+  --line-strong: #443b35;
+
+  /* Maroon reads as near-black on a dark ground, so brand text lifts to a
+     desaturated rose that keeps the identity but clears AA contrast. */
+  --brand: #e8b4b4;
+  --brand-hover: #f2c9c9;
+  --brand-tint: rgba(186, 26, 26, 0.16);
+  --brand-tint-line: rgba(186, 26, 26, 0.32);
+  --accent: var(--color-gold-400);
 }
 
 html {
@@ -24,51 +77,202 @@ html {
 
 body {
   overflow-x: hidden;
+  background-color: var(--surface-page);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
 }
 
-.bg-maroon-900 {
-  background-color: var(--color-maroon-900);
+/* Theme flip should feel like a dimmer, not a strobe. Scoped to colour
+   properties so layout and transform animations stay snappy. */
+body, header, footer, section, main, nav, aside, div, a, button,
+input, select, textarea, p, span, li, h1, h2, h3, h4, h5, h6 {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
 }
-.text-maroon-800 {
-  color: var(--color-maroon-800);
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
-.text-gold-500 {
-  color: var(--color-gold-500);
+
+::selection {
+  background-color: var(--color-maroon-800);
+  color: #fff;
 }
-.bg-gold-500 {
+.dark ::selection {
   background-color: var(--color-gold-500);
-}
-.hover\:bg-maroon-800:hover {
-  background-color: var(--color-maroon-800);
-}
-.hover\:bg-gold-600:hover {
-  background-color: var(--color-gold-600);
-}
-.hover\:bg-maroon-700:hover {
-  background-color: var(--color-maroon-700);
-}
-.text-maroon-600 {
-  color: var(--color-maroon-600);
-}
-.bg-maroon-600 {
-  background-color: var(--color-maroon-600);
-}
-.bg-maroon-800 {
-  background-color: var(--color-maroon-800);
-}
-.border-maroon-800 {
-  border-color: var(--color-maroon-800);
-}
-.text-maroon-900 {
-  color: var(--color-maroon-900);
-}
-.border-gold-500 {
-  border-color: var(--color-gold-500);
-}
-.bg-maroon-50 {
-  background-color: var(--color-maroon-50);
-}
-.text-maroon-700 {
-  color: var(--color-maroon-700);
+  color: #16130f;
 }
 
+/* Brand-tinted focus ring instead of the default blue halo. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: var(--line-strong);
+  border-radius: 999px;
+  border: 3px solid var(--surface-page);
+}
+
+/* ---------------------------------------------------------------
+   Dark-mode mapping.
+   Components use plain Tailwind greys, so rather than rewriting every
+   file we remap those utilities onto the tokens above. Kept in one
+   block so there is a single place to reason about dark mode.
+   --------------------------------------------------------------- */
+.dark .bg-white { background-color: var(--surface-card); }
+.dark .bg-gray-50 { background-color: var(--surface-page); }
+.dark .bg-gray-100 { background-color: var(--surface-raised); }
+.dark .bg-gray-200 { background-color: var(--line-strong); }
+.dark .hover\:bg-gray-100:hover { background-color: var(--surface-raised); }
+.dark .hover\:bg-gray-200:hover { background-color: var(--line-strong); }
+.dark .bg-white\/80 { background-color: rgb(30 26 22 / 0.8); }
+.dark .bg-white\/90 { background-color: rgb(30 26 22 / 0.9); }
+.dark .bg-white\/95 { background-color: rgb(30 26 22 / 0.95); }
+.dark .border-white\/40 { border-color: rgb(255 255 255 / 0.12); }
+
+.dark .text-gray-900,
+.dark .text-gray-800 { color: var(--ink-strong); }
+.dark .text-gray-700 { color: var(--ink); }
+.dark .text-gray-600,
+.dark .text-gray-500 { color: var(--ink-muted); }
+.dark .text-gray-400,
+.dark .text-gray-300 { color: var(--ink-faint); }
+.dark .hover\:text-gray-900:hover { color: var(--ink-strong); }
+
+.dark .border-gray-100,
+.dark .border-gray-200 { border-color: var(--line); }
+.dark .border-gray-300 { border-color: var(--line-strong); }
+.dark .divide-gray-100 > * + *,
+.dark .divide-gray-200 > * + * { border-color: var(--line); }
+
+.dark .text-maroon-700,
+.dark .text-maroon-800,
+.dark .text-maroon-900 { color: var(--brand); }
+.dark .text-maroon-600 { color: #f0c4c4; }
+.dark .hover\:text-maroon-800:hover { color: var(--brand-hover); }
+.dark .bg-maroon-50,
+.dark .hover\:bg-maroon-50:hover { background-color: var(--brand-tint); }
+.dark .hover\:bg-maroon-100:hover { background-color: rgba(186, 26, 26, 0.26); }
+.dark .border-maroon-100 { border-color: var(--brand-tint-line); }
+.dark .border-maroon-800 { border-color: var(--brand); }
+
+/* Filled brand buttons stay maroon but brighten a step so they don't
+   sink into the dark background. */
+.dark .bg-maroon-800 { background-color: var(--color-maroon-600); }
+.dark .bg-maroon-900 { background-color: var(--color-maroon-700); }
+.dark .hover\:bg-maroon-700:hover { background-color: var(--color-maroon-500); }
+.dark .hover\:bg-maroon-800:hover { background-color: var(--color-maroon-600); }
+
+/* Accent chips: amber and emerald tints are far too bright inverted. */
+.dark .bg-amber-50 { background-color: rgba(197, 160, 23, 0.14); }
+.dark .hover\:bg-amber-100:hover { background-color: rgba(197, 160, 23, 0.22); }
+.dark .border-amber-200\/80 { border-color: rgba(197, 160, 23, 0.32); }
+.dark .bg-amber-300 { background-color: rgba(197, 160, 23, 0.4); }
+.dark .text-amber-900 { color: #e5c56a; }
+
+.dark .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.12); }
+.dark .bg-emerald-100 { background-color: rgba(16, 185, 129, 0.16); }
+.dark .text-emerald-600,
+.dark .text-emerald-700,
+.dark .text-emerald-800 { color: #5eead4; }
+.dark .hover\:text-emerald-700:hover { color: #99f6e4; }
+.dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.12); }
+.dark .text-blue-600,
+.dark .text-blue-700 { color: #93c5fd; }
+.dark .hover\:text-blue-600:hover { color: #bfdbfe; }
+
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: var(--surface-raised);
+  color: var(--ink-strong);
+  border-color: var(--line-strong);
+}
+.dark input::placeholder,
+.dark textarea::placeholder { color: var(--ink-faint); }
+
+/* Ambient shadows read as black smudges on a dark page; swap for a
+   hairline ring plus a deeper, more diffuse shadow. */
+.dark .shadow-sm,
+.dark .shadow,
+.dark .shadow-md {
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 0 0 1px var(--line);
+}
+.dark .shadow-lg,
+.dark .shadow-xl,
+.dark .shadow-2xl {
+  box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.7), 0 0 0 1px var(--line);
+}
+
+/* Photography sits calmer against a dark ground. */
+.dark img { filter: brightness(0.92) saturate(0.96); }
+
+/* The RF monogram keeps the deep maroon in both themes — the lighter
+   dark-mode maroon used for buttons drops the gold below AA. */
+.brand-mark {
+  background-color: var(--color-maroon-800);
+  color: var(--color-gold-400);
+}
+
+/* ---------------------------------------------------------------
+   Footer.
+   It is a dark slab in BOTH themes, so it must opt out of the grey
+   remapping above — otherwise dark mode dims its links into the
+   background. Owns its own palette instead.
+   --------------------------------------------------------------- */
+.site-footer {
+  background-color: #0d0b09;
+  color: #b5aca4;
+  border-top: 1px solid #241f1b;
+}
+.dark .site-footer {
+  background-color: #100d0b;
+}
+.site-footer .site-footer-chip {
+  background-color: #221d19;
+  color: #cfc7bf;
+}
+.site-footer .site-footer-rule {
+  border-color: #241f1b;
+}
+/* Full-strength maroon is unreadable on the footer's near-black. */
+.site-footer .text-maroon-500,
+.site-footer .text-maroon-600 {
+  color: #e8b4b4;
+}
+.site-footer .text-gold-500 {
+  color: var(--color-gold-400);
+}
+
+/* ---------------------------------------------------------------
+   Brand utilities (Tailwind v4 does not emit these from @theme alone)
+   --------------------------------------------------------------- */
+.bg-maroon-900 { background-color: var(--color-maroon-900); }
+.bg-maroon-800 { background-color: var(--color-maroon-800); }
+.bg-maroon-600 { background-color: var(--color-maroon-600); }
+.bg-maroon-50 { background-color: var(--color-maroon-50); }
+.text-maroon-900 { color: var(--color-maroon-900); }
+.text-maroon-800 { color: var(--color-maroon-800); }
+.text-maroon-700 { color: var(--color-maroon-700); }
+.text-maroon-600 { color: var(--color-maroon-600); }
+.text-gold-500 { color: var(--color-gold-500); }
+.bg-gold-500 { background-color: var(--color-gold-500); }
+.border-gold-500 { border-color: var(--color-gold-500); }
+.border-maroon-800 { border-color: var(--color-maroon-800); }
+.hover\:bg-maroon-800:hover { background-color: var(--color-maroon-800); }
+.hover\:bg-maroon-700:hover { background-color: var(--color-maroon-700); }
+.hover\:bg-gold-600:hover { background-color: var(--color-gold-600); }

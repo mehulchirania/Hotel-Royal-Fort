@@ -3,6 +3,7 @@ import { ShieldCheck, Map, HeartHandshake } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
 import { useNav } from '../context/nav';
+import { Img } from './Img';
 
 export function About() {
   const { navigate } = useNav();
@@ -71,19 +72,22 @@ export function About() {
             transition={{ duration: 0.6 }}
             className="relative grid grid-cols-2 gap-4"
           >
-            <img 
-              src="/images/hotel-lobby-dining.png" 
-              alt="Hotel Reception" 
+            <Img
+              name="hotel-lobby-dining"
+              alt="Hotel Reception"
+              sizes="(min-width: 1024px) 50vw, 100vw"
               className="col-span-2 w-full h-64 object-cover rounded-2xl shadow-lg"
             />
-            <img 
-              src="/images/hotel-room.png" 
-              alt="Comfortable Room" 
+            <Img
+              name="hotel-room"
+              alt="Comfortable Room"
+              sizes="(min-width: 1024px) 25vw, 50vw"
               className="w-full h-48 object-cover rounded-2xl shadow-lg"
             />
-            <img 
-              src="/images/hotel-exterior.png" 
-              alt="Cozy Details" 
+            <Img
+              name="hotel-exterior"
+              alt="Cozy Details"
+              sizes="(min-width: 1024px) 25vw, 50vw"
               className="w-full h-48 object-cover rounded-2xl shadow-lg"
             />
             {/* Design accent */}

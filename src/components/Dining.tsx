@@ -2,6 +2,7 @@ import React from 'react';
 import { Coffee, MapPin, ConciergeBell } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
+import { Img } from './Img';
 
 export function Dining() {
   const options = [
@@ -66,9 +67,10 @@ export function Dining() {
                transition={{ duration: 0.6 }}
                className="relative rounded-2xl overflow-hidden shadow-2xl"
             >
-              <img 
-                src="/images/hotel-lobby-dining.png" 
-                alt="Hotel Dining Area" 
+              <Img
+                name="hotel-lobby-dining"
+                alt="Hotel Dining Area"
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="w-full h-full object-cover aspect-square lg:aspect-[4/5] opacity-90"
               />
               <div className="absolute inset-0 border-4 border-gold-500/20 rounded-2xl m-3 pointer-events-none"></div>

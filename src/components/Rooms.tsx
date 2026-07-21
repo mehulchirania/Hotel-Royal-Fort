@@ -3,30 +3,38 @@ import { ExternalLink, Wifi, Wind, Tv, Coffee, Bath, BedDouble } from 'lucide-re
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
 import { useNav } from '../context/nav';
+import { Img } from './Img';
+import type { ImageName } from '../data/images.generated';
 
-const rooms = [
+interface Room {
+  title: string;
+  description: string;
+  image: ImageName;
+  accent: string;
+  tag: string;
+  directBooking?: boolean;
+}
+
+const rooms: Room[] = [
   {
     title: 'Chief AC Room',
     description: 'A practical air-conditioned room for solo travellers and short stays, with clean essentials and easy service access.',
-    image: '/images/hotel-room.png',
+    image: 'hotel-room',
     accent: 'bg-blue-500',
-    badge: 'bg-blue-50 text-blue-700',
     tag: 'Standard',
   },
   {
     title: 'Deluxe AC Room',
     description: 'A roomier air-conditioned option for couples and business guests looking for extra comfort during a Ballari stay.',
-    image: '/images/hotel-room.png',
+    image: 'hotel-room',
     accent: 'bg-emerald-500',
-    badge: 'bg-emerald-50 text-emerald-700',
     tag: 'Popular',
   },
   {
     title: 'Suite Room',
     description: 'A premium suite option for guests who want extra room, comfort, and privacy during their stay.',
-    image: '/images/hotel-room.png',
+    image: 'hotel-room',
     accent: 'bg-amber-500',
-    badge: 'bg-amber-50 text-amber-700',
     tag: 'Premium',
     directBooking: true,
   },
@@ -65,17 +73,29 @@ export function Rooms() {
               {/* Colour accent strip */}
               <div className={`h-1.5 ${room.accent}`} />
 
-              <div className="relative h-56 overflow-hidden">
-                <img
-                  src={room.image}
+              <div className="relative h-56 overflow-hidden bg-gray-100">
+                <Img
+                  name={room.image}
                   alt={room.title}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className={`absolute top-3 left-3 px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded-full shadow-sm ${room.badge}`}>
-                  {room.tag}
+
+                {/* Scrim keeps both pills legible whatever the photo behind them. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-black/45 via-black/15 to-transparent pointer-events-none"
+                />
+
+                <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full shadow-sm">
+                  <span aria-hidden="true" className={`w-1.5 h-1.5 rounded-full ${room.accent}`} />
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-gray-900">
+                    {room.tag}
+                  </span>
                 </div>
-                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-semibold uppercase tracking-wider text-maroon-800 rounded-full shadow-sm">
-                  Goibibo live booking
+
+                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-maroon-800 rounded-full shadow-sm">
+                  {room.directBooking ? 'Direct booking' : 'Goibibo live booking'}
                 </div>
               </div>
 

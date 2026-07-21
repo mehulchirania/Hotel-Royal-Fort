@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 
-export type Page = 'home' | 'rooms' | 'amenities' | 'events' | 'dining' | 'gallery' | 'location' | 'contact';
+export type Page = 'home' | 'rooms' | 'amenities' | 'events' | 'dining' | 'gallery' | 'reviews' | 'location' | 'contact';
 
-const VALID_PAGES: Page[] = ['home', 'rooms', 'amenities', 'events', 'dining', 'gallery', 'location', 'contact'];
+const VALID_PAGES: Page[] = ['home', 'rooms', 'amenities', 'events', 'dining', 'gallery', 'reviews', 'location', 'contact'];
 
 function getInitialPage(): Page {
   const params = new URLSearchParams(window.location.search);

@@ -1,13 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Phone, MessageCircle, MapPin } from 'lucide-react';
+import { Menu, X, Phone, MessageCircle, MapPin, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { hotel } from '../data/hotel';
 import { useNav, type Page } from '../context/nav';
+import { useTheme } from '../context/theme';
+
+/** Sun/moon swap that rotates and fades rather than popping between glyphs. */
+function ThemeIcon({ theme }: { theme: 'light' | 'dark' }) {
+  return (
+    <span className="relative block w-5 h-5">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={theme}
+          initial={{ opacity: 0, rotate: -70, scale: 0.6 }}
+          animate={{ opacity: 1, rotate: 0, scale: 1 }}
+          exit={{ opacity: 0, rotate: 70, scale: 0.6 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+          className="absolute inset-0"
+        >
+          {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { currentPage, navigate } = useNav();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +46,7 @@ export function Navbar() {
     { name: 'Events', page: 'events' },
     { name: 'Gallery', page: 'gallery' },
     { name: 'Dining', page: 'dining' },
+    { name: 'Reviews', page: 'reviews' },
     { name: 'Location', page: 'location' },
     { name: 'Contact', page: 'contact' },
   ];
@@ -36,34 +59,40 @@ export function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-md py-2' : 'bg-white/95 backdrop-blur-sm shadow-sm py-4'
+        isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100 py-2'
+          : 'bg-white/95 backdrop-blur-sm border-b border-gray-100 py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center gap-6 lg:gap-10">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <button onClick={() => handleNav('home')} className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-maroon-800 rounded-lg flex items-center justify-center">
-                <span className="text-gold-500 font-serif text-xl font-bold">RF</span>
+            <button onClick={() => handleNav('home')} className="flex items-center gap-2.5 group">
+              <div className="w-10 h-10 brand-mark rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                <span className="font-serif text-xl font-bold">RF</span>
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-serif text-xl font-bold text-gray-900 leading-none">Hotel Royal Fort</span>
-                <span className="text-[10px] uppercase tracking-widest text-maroon-700 font-medium">Ballari</span>
+                <span className="font-serif text-xl font-bold text-gray-900 leading-none whitespace-nowrap">Hotel Royal Fort</span>
+                <span className="text-[10px] uppercase tracking-widest text-maroon-700 font-medium mt-0.5">Ballari</span>
               </div>
             </button>
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex space-x-6 lg:space-x-8">
+          {/* Nine links only fit from lg up — below that they were being
+              silently clipped by the body's overflow-x:hidden. */}
+          <nav className="hidden lg:flex items-center gap-x-4 xl:gap-x-6">
             {navLinks.map((link) => (
               <button
                 key={link.name}
                 onClick={() => handleNav(link.page)}
-                className={`font-medium text-sm transition-colors ${
+                /* border-b-2 lives on every state so the active link does not
+                   nudge the row by 2px when it changes */
+                className={`relative font-medium text-sm whitespace-nowrap pb-1 border-b-2 transition-colors ${
                   currentPage === link.page
-                    ? 'text-maroon-800 border-b-2 border-maroon-800 pb-0.5'
-                    : 'text-gray-600 hover:text-maroon-800'
+                    ? 'text-maroon-800 border-maroon-800'
+                    : 'text-gray-600 border-transparent hover:text-maroon-800 hover:border-maroon-100'
                 }`}
               >
                 {link.name}
@@ -72,8 +101,17 @@ export function Navbar() {
           </nav>
 
           {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center space-x-3">
-            <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer" className="hidden xl:flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-maroon-800">
+          <div className="hidden xl:flex items-center gap-3">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-maroon-800 transition-colors"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label="Toggle dark mode"
+            >
+              <ThemeIcon theme={theme} />
+            </button>
+
+            <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer" className="hidden 2xl:flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-maroon-800 transition-colors">
               <MapPin className="w-4 h-4 text-maroon-700" />
               Directions
             </a>
@@ -87,11 +125,22 @@ export function Navbar() {
             </a>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="flex items-center lg:hidden">
+          {/* Compact group for everything below xl. The toggle stays reachable
+              at every width; the hamburger only appears once the nav collapses. */}
+          <div className="flex items-center gap-2 xl:hidden">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-maroon-800 transition-colors"
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label="Toggle dark mode"
+            >
+              <ThemeIcon theme={theme} />
+            </button>
+
             <button
               type="button"
-              className="text-gray-600 hover:text-maroon-800 p-2"
+              className="lg:hidden text-gray-600 hover:text-maroon-800 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-expanded={mobileMenuOpen}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               <span className="sr-only">Open main menu</span>
@@ -112,7 +161,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-gray-100 bg-white"
+            className="lg:hidden border-t border-gray-100 bg-white overflow-hidden"
           >
             <div className="px-4 pt-2 pb-6 space-y-1 shadow-inner">
               {navLinks.map((link) => (

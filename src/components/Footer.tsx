@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Facebook, Instagram, Twitter, MapPin } from 'lucide-react';
 import { hotel } from '../data/hotel';
 import { useNav, type Page } from '../context/nav';
+import { legalDocs, legalDocOrder, type LegalDocId } from '../data/legal';
+import { LegalModal } from './LegalModal';
 
 export function Footer() {
   const { navigate } = useNav();
+  const [openDoc, setOpenDoc] = useState<LegalDocId | null>(null);
 
   const quickLinks: { label: string; page: Page }[] = [
     { label: 'Home', page: 'home' },
@@ -12,18 +15,19 @@ export function Footer() {
     { label: 'Amenities', page: 'amenities' },
     { label: 'Events & Banquets', page: 'events' },
     { label: 'Gallery', page: 'gallery' },
+    { label: 'Guest Reviews', page: 'reviews' },
     { label: 'Contact Us', page: 'contact' },
   ];
 
   return (
-    <footer className="bg-gray-950 text-gray-400 py-12 lg:py-16 border-t border-gray-900">
+    <footer className="site-footer py-12 lg:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-12">
 
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-maroon-800 rounded-lg flex items-center justify-center">
-                <span className="text-gold-500 font-serif text-xl font-bold">RF</span>
+              <div className="w-10 h-10 brand-mark rounded-lg flex items-center justify-center">
+                <span className="font-serif text-xl font-bold">RF</span>
               </div>
               <div className="flex flex-col">
                 <span className="font-serif text-xl font-bold text-white leading-none">Hotel Royal Fort</span>
@@ -34,13 +38,13 @@ export function Footer() {
               Comfortable rooms, suite stays, banquet halls, and outdoor event space on New Trunk Road in Ballari.
             </p>
             <div className="flex items-center gap-3">
-              <a href="#" className="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center hover:bg-maroon-800 hover:text-white transition-colors">
+              <a href="#" className="w-8 h-8 rounded-full site-footer-chip flex items-center justify-center hover:bg-maroon-800 hover:text-white transition-colors">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center hover:bg-maroon-800 hover:text-white transition-colors">
+              <a href="#" className="w-8 h-8 rounded-full site-footer-chip flex items-center justify-center hover:bg-maroon-800 hover:text-white transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 rounded-full bg-gray-900 flex items-center justify-center hover:bg-maroon-800 hover:text-white transition-colors">
+              <a href="#" className="w-8 h-8 rounded-full site-footer-chip flex items-center justify-center hover:bg-maroon-800 hover:text-white transition-colors">
                 <Twitter className="w-4 h-4" />
               </a>
             </div>
@@ -65,10 +69,17 @@ export function Footer() {
           <div>
             <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-xs">Support</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-gold-400 transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-gold-400 transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-gold-400 transition-colors">Cancellation Policy</a></li>
-              <li><a href="#" className="hover:text-gold-400 transition-colors">FAQ</a></li>
+              {legalDocOrder.map((id) => (
+                <li key={id}>
+                  <button
+                    onClick={() => setOpenDoc(id)}
+                    aria-haspopup="dialog"
+                    className="hover:text-gold-400 transition-colors text-left"
+                  >
+                    {id === 'faq' ? 'FAQ' : legalDocs[id].title}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -87,10 +98,12 @@ export function Footer() {
 
         </div>
 
-        <div className="pt-8 border-t border-gray-900 text-sm flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+        <div className="pt-8 border-t site-footer-rule text-sm flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
           <p>© 2026 Hotel Royal Fort, Ballari. All rights reserved.</p>
         </div>
       </div>
+
+      <LegalModal doc={openDoc ? legalDocs[openDoc] : null} onClose={() => setOpenDoc(null)} />
     </footer>
   );
 }

@@ -17,7 +17,7 @@ export const hotel = {
   address: 'New Trunk Road, Infantry Road, Housing Board Colony, Sanjay Gandhi Nagar, Ballari, Karnataka 583104',
   shortAddress: 'New Trunk Road, behind Hotel Pola Paradise, Ballari',
   mapsUrl:
-    'https://www.google.com/maps/place/Hotel+Royal+Fort/@15.1482782,76.9015541,17z/data=!3m1!4b1!4m10!3m9!1s0x3bb713c50801550d:0x90a32d2b50c8036a!5m3!1s2026-06-06!4m1!1i2!8m2!3d15.148273!4d76.904129!16s%2Fg%2F1pp2tyhbh?entry=ttu&g_ep=EgoyMDI2MDUyNy4wIKXMDSoASAFQAw%3D%3D',
+    'https://www.google.com/maps/place/Royal+Fort/@15.147814,76.9012402,16z/data=!3m1!4b1!4m9!3m8!1s0x3bb7132bed88334f:0x57a0afaf84844c62!5m2!4m1!1i2!8m2!3d15.1478088!4d76.9038151!16s%2Fg%2F11ksl0xm6m?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D',
   goibiboUrl:
     'https://www.goibibo.com/hotels/hotel-details/?checkin=20260606&checkout=20260607&roomString=1-2-0&searchText=Hotel%20Royal%20Fort&locusId=CTBELL&locusType=city&cityCode=CTBELL&cc=IN&_uCurrency=INR&vcid=CTBELL&giHotelId=3415246453017752306&mmtId=20130416155141839&topHtlId=20130416155141839&sType=hotel',
   mapEmbedUrl:
