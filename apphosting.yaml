@@ -1,0 +1,67 @@
+# Firebase App Hosting configuration.
+#
+# App Hosting builds with `npm run build` and serves with `npm start`
+# (server.js), so the Express API and the static bundle are served by the same
+# service. Without this file no environment is passed to the container, which
+# is why /api/enquiry returned 500 "Unable to send enquiry right now."
+#
+# Secret values are NOT stored here — only references to Google Secret Manager.
+# Create them once with:
+#   firebase apphosting:secrets:set SMTP_USER
+#   firebase apphosting:secrets:set SMTP_PASS
+#   firebase apphosting:secrets:set ENGAGEMENT_ADMIN_TOKEN
+#   firebase apphosting:secrets:set ENGAGEMENT_IP_SALT
+
+runConfig:
+  # A small hotel site: keep one warm instance so the first guest of the day
+  # does not wait on a cold start, and cap spend.
+  minInstances: 0
+  maxInstances: 2
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
+
+env:
+  # --- Mail delivery (non-sensitive settings) ---
+  - variable: SMTP_HOST
+    value: smtp.gmail.com
+    availability:
+      - RUNTIME
+
+  - variable: SMTP_PORT
+    value: "465"
+    availability:
+      - RUNTIME
+
+  - variable: SMTP_SECURE
+    value: "true"
+    availability:
+      - RUNTIME
+
+  - variable: ENQUIRY_TO_EMAIL
+    value: gmroyalfort@gmail.com
+    availability:
+      - RUNTIME
+
+  # --- Mail delivery (secrets) ---
+  # For Gmail, SMTP_PASS must be an App Password, not the account password.
+  - variable: SMTP_USER
+    secret: SMTP_USER
+    availability:
+      - RUNTIME
+
+  - variable: SMTP_PASS
+    secret: SMTP_PASS
+    availability:
+      - RUNTIME
+
+  # --- Engagement analytics ---
+  - variable: ENGAGEMENT_ADMIN_TOKEN
+    secret: ENGAGEMENT_ADMIN_TOKEN
+    availability:
+      - RUNTIME
+
+  - variable: ENGAGEMENT_IP_SALT
+    secret: ENGAGEMENT_IP_SALT
+    availability:
+      - RUNTIME

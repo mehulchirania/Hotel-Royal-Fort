@@ -1,32 +1,79 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Hotel Royal Fort, Ballari
 
-# Run and deploy your AI Studio app
+Marketing site and enquiry backend for Hotel Royal Fort. A Vite + React front end
+served by a small Express server, deployed on Firebase App Hosting.
 
-This contains everything you need to run your app locally.
+## Run locally
 
-View your app in AI Studio: https://ai.studio/apps/32c12220-2fc7-45c5-a8fe-f8d33021b259
+**Prerequisites:** Node.js 20+
 
-## Run Locally
+```bash
+npm install
+npm run dev          # front end only, http://localhost:3000
+```
 
-**Prerequisites:**  Node.js
+To run the full stack (Express serving the built bundle plus the API):
 
+```bash
+npm run build
+npm start            # http://localhost:8080
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Copy `.env.example` to `.env` and fill it in for local API work. Firestore access
+locally needs Application Default Credentials (`gcloud auth application-default
+login`); without them the site still serves and only the engagement endpoints
+return 503.
 
-## Engagement Data
+## Images
 
-The production server records each website visit in `data/engagement-visits.csv`.
-Rows include page, referrer, UTM parameters, device/browser hints, a hashed IP value,
-and precise latitude/longitude only when the visitor allows browser location access.
+Source photos live in `assets/images-src/` — deliberately **outside** `public/`,
+so the multi-megabyte originals are never shipped. After adding or replacing one:
 
-Set `ENGAGEMENT_ADMIN_TOKEN` in your environment, then download the table from:
-`/api/engagement/visits.csv?token=your-secret-token`
+```bash
+npm run optimize:images
+```
 
-You can also view the protected dashboard at:
-`/admin/engagement?token=your-secret-token`
+This writes responsive WebP variants plus a social card into `public/images/` and
+regenerates `src/data/images.generated.ts`. Components reference images by name
+through `<Img name="hotel-room" />` — never by raw path.
+
+## Deployment
+
+Pushing to `main` triggers a Firebase App Hosting rollout automatically (backend
+`royalfort`, region `us-east4`). App Hosting runs `npm run build`, then `npm start`,
+so the same service serves both the static bundle and `/api/**`.
+
+Runtime configuration comes from `apphosting.yaml`. Secrets are stored in Google
+Secret Manager, never in the repo:
+
+```bash
+firebase apphosting:secrets:set SMTP_USER
+firebase apphosting:secrets:set SMTP_PASS
+firebase apphosting:secrets:set ENGAGEMENT_ADMIN_TOKEN
+firebase apphosting:secrets:set ENGAGEMENT_IP_SALT
+```
+
+For Gmail, `SMTP_PASS` must be an [App Password](https://support.google.com/accounts/answer/185833),
+not the account password.
+
+Check what actually landed in the running container:
+
+```
+GET /api/health   ->  { ok, mailConfigured, engagementConfigured }
+```
+
+## Engagement data
+
+Each visit is recorded in Firestore (collection `engagementVisits`): page,
+referrer, UTM parameters, device and browser hints, a salted IP hash, and precise
+latitude/longitude only when the visitor explicitly allows browser location
+access. Security rules deny all direct client access — only the server writes,
+via the Admin SDK.
+
+With `ENGAGEMENT_ADMIN_TOKEN` set:
+
+- Dashboard — `/admin/engagement?token=...`
+- CSV export — `/api/engagement/visits.csv?token=...`
+
+Because this collects visitor location and a derived IP identifier, keep the
+privacy policy in `src/data/legal.ts` accurate if you change what is captured.

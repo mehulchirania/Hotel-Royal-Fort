@@ -1,9 +1,10 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import crypto from 'node:crypto';
-import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { initializeApp, applicationDefault, getApps } from 'firebase-admin/app';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -12,10 +13,43 @@ const app = express();
 const port = Number(process.env.PORT) || 8080;
 const distDir = path.join(__dirname, 'dist');
 const enquiryToEmail = process.env.ENQUIRY_TO_EMAIL || 'gmroyalfort@gmail.com';
-const engagementDir = path.join(__dirname, 'data');
-const engagementCsvPath = path.join(engagementDir, 'engagement-visits.csv');
 const engagementAdminToken = process.env.ENGAGEMENT_ADMIN_TOKEN;
 const engagementIpSalt = process.env.ENGAGEMENT_IP_SALT || 'hotel-royal-fort-engagement';
+const ENGAGEMENT_COLLECTION = 'engagementVisits';
+
+/**
+ * Engagement rows live in Firestore, not on disk.
+ *
+ * App Hosting runs on Cloud Run, whose filesystem is in-memory and per
+ * instance: the previous CSV lost every row on restart or scale-down and
+ * diverged between instances. Firestore is also where the admin dashboard
+ * reads from, so the two can never disagree.
+ *
+ * Initialisation is lazy and failure-tolerant — if credentials are missing
+ * (a plain local checkout with no ADC), the site must still serve; only the
+ * engagement endpoints degrade.
+ */
+let firestore = null;
+let firestoreError = null;
+
+function getDb() {
+  if (firestore) return firestore;
+  if (firestoreError) throw firestoreError;
+
+  try {
+    if (getApps().length === 0) {
+      // On App Hosting the runtime service account is picked up automatically.
+      initializeApp({ credential: applicationDefault() });
+    }
+    firestore = getFirestore();
+    firestore.settings({ ignoreUndefinedProperties: true });
+    return firestore;
+  } catch (error) {
+    firestoreError = error;
+    console.error('Firestore unavailable — engagement tracking disabled:', error.message);
+    throw error;
+  }
+}
 
 const ENGAGEMENT_HEADERS = [
   'visit_id',
@@ -88,46 +122,12 @@ function csvEscape(value) {
   return /[",\n]/.test(cell) ? `"${cell.replace(/"/g, '""')}"` : cell;
 }
 
-function parseCsvLine(line) {
-  const values = [];
-  let current = '';
-  let quoted = false;
-
-  for (let i = 0; i < line.length; i += 1) {
-    const char = line[i];
-
-    if (quoted) {
-      if (char === '"' && line[i + 1] === '"') {
-        current += '"';
-        i += 1;
-      } else if (char === '"') {
-        quoted = false;
-      } else {
-        current += char;
-      }
-    } else if (char === '"') {
-      quoted = true;
-    } else if (char === ',') {
-      values.push(current);
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-
-  values.push(current);
-  return values;
-}
-
-function ensureEngagementTable() {
-  fs.mkdirSync(engagementDir, { recursive: true });
-  if (!fs.existsSync(engagementCsvPath)) {
-    fs.writeFileSync(engagementCsvPath, `${ENGAGEMENT_HEADERS.join(',')}\n`, 'utf8');
-  }
-}
-
 function rowToCsv(row) {
   return ENGAGEMENT_HEADERS.map((header) => csvEscape(row[header])).join(',');
+}
+
+function buildCsv(rows) {
+  return [ENGAGEMENT_HEADERS.join(','), ...rows.map(rowToCsv)].join('\n');
 }
 
 function getClientIp(req) {
@@ -153,31 +153,37 @@ function getAuthToken(req) {
   return req.query.token;
 }
 
-function readEngagementRows() {
-  ensureEngagementTable();
-  const lines = fs.readFileSync(engagementCsvPath, 'utf8').trimEnd().split('\n');
-  const headers = parseCsvLine(lines[0] || '');
-  return lines.slice(1).filter(Boolean).map((line) => {
-    const values = parseCsvLine(line);
-    return headers.reduce((row, header, index) => {
-      row[header] = values[index] || '';
+/** Newest first. `limit` keeps the dashboard bounded as the collection grows. */
+async function readEngagementRows(limit = 1000) {
+  const snapshot = await getDb()
+    .collection(ENGAGEMENT_COLLECTION)
+    .orderBy('created_at', 'desc')
+    .limit(limit)
+    .get();
+
+  return snapshot.docs.map((doc) => {
+    const data = doc.data();
+    // Normalise to plain strings so the CSV and dashboard stay format-agnostic.
+    return ENGAGEMENT_HEADERS.reduce((row, header) => {
+      row[header] = data[header] === undefined || data[header] === null ? '' : String(data[header]);
       return row;
     }, {});
   });
 }
 
-function writeEngagementRows(rows) {
-  ensureEngagementTable();
-  const content = [
-    ENGAGEMENT_HEADERS.join(','),
-    ...rows.map((row) => rowToCsv(row)),
-  ].join('\n');
-  fs.writeFileSync(engagementCsvPath, `${content}\n`, 'utf8');
+async function createEngagementRow(visitId, row) {
+  await getDb().collection(ENGAGEMENT_COLLECTION).doc(visitId).set({
+    ...row,
+    written_at: FieldValue.serverTimestamp(),
+  });
 }
 
-function appendEngagementRow(row) {
-  ensureEngagementTable();
-  fs.appendFileSync(engagementCsvPath, `${rowToCsv(row)}\n`, 'utf8');
+async function updateEngagementRow(visitId, patch) {
+  const ref = getDb().collection(ENGAGEMENT_COLLECTION).doc(visitId);
+  const snapshot = await ref.get();
+  if (!snapshot.exists) return null;
+  await ref.update({ ...patch, written_at: FieldValue.serverTimestamp() });
+  return { ...snapshot.data(), ...patch };
 }
 
 function escapeHtml(value) {
@@ -468,73 +474,91 @@ function renderEngagementDashboard(rows, token) {
 
 app.use(express.json({ limit: '20kb' }));
 
-app.post('/api/engagement/visit', (req, res) => {
+app.post('/api/engagement/visit', async (req, res) => {
   const now = new Date().toISOString();
   const body = req.body || {};
   const visitId = crypto.randomUUID();
 
-  appendEngagementRow({
-    visit_id: visitId,
-    created_at: now,
-    last_updated_at: now,
-    landing_path: body.landingPath,
-    current_page: body.currentPage,
-    pages_visited: body.currentPage,
-    last_page_at: now,
-    referrer: body.referrer,
-    utm_source: body.utm?.source,
-    utm_medium: body.utm?.medium,
-    utm_campaign: body.utm?.campaign,
-    utm_term: body.utm?.term,
-    utm_content: body.utm?.content,
-    timezone: body.timezone,
-    language: body.language,
-    languages: Array.isArray(body.languages) ? body.languages.join('|') : '',
-    platform: body.platform,
-    screen: body.screen,
-    viewport: body.viewport,
-    device_pixel_ratio: body.devicePixelRatio,
-    device_memory: body.deviceMemory,
-    hardware_concurrency: body.hardwareConcurrency,
-    connection_type: body.connectionType,
-    touch_support: body.touchSupport,
-    user_agent: req.headers['user-agent'] || body.userAgent,
-    accept_language: req.headers['accept-language'],
-    ip_hash: hashIp(getClientIp(req)),
-    location_status: body.locationStatus || 'not_requested',
-  });
+  try {
+    await createEngagementRow(visitId, {
+      visit_id: visitId,
+      created_at: now,
+      last_updated_at: now,
+      landing_path: body.landingPath,
+      current_page: body.currentPage,
+      pages_visited: body.currentPage,
+      last_page_at: now,
+      referrer: body.referrer,
+      utm_source: body.utm?.source,
+      utm_medium: body.utm?.medium,
+      utm_campaign: body.utm?.campaign,
+      utm_term: body.utm?.term,
+      utm_content: body.utm?.content,
+      timezone: body.timezone,
+      language: body.language,
+      languages: Array.isArray(body.languages) ? body.languages.join('|') : '',
+      platform: body.platform,
+      screen: body.screen,
+      viewport: body.viewport,
+      device_pixel_ratio: body.devicePixelRatio,
+      device_memory: body.deviceMemory,
+      hardware_concurrency: body.hardwareConcurrency,
+      connection_type: body.connectionType,
+      touch_support: body.touchSupport,
+      user_agent: req.headers['user-agent'] || body.userAgent,
+      accept_language: req.headers['accept-language'],
+      ip_hash: hashIp(getClientIp(req)),
+      location_status: body.locationStatus || 'not_requested',
+    });
 
-  return res.status(201).json({ visitId });
+    return res.status(201).json({ visitId });
+  } catch (error) {
+    console.error('Failed to record visit:', error.message);
+    // Analytics must never break the page for a guest.
+    return res.status(503).json({ message: 'Engagement tracking unavailable.' });
+  }
 });
 
-app.post('/api/engagement/page', (req, res) => {
+app.post('/api/engagement/page', async (req, res) => {
   const { visitId, page } = req.body || {};
 
   if (!visitId || !page) {
     return res.status(400).json({ message: 'visitId and page are required.' });
   }
 
-  const rows = readEngagementRows();
-  const row = rows.find((entry) => entry.visit_id === visitId);
+  try {
+    const now = new Date().toISOString();
+    const ref = getDb().collection(ENGAGEMENT_COLLECTION).doc(String(visitId));
 
-  if (!row) {
-    return res.status(404).json({ message: 'Visit was not found.' });
+    // A transaction keeps the pages_visited trail intact when a guest clicks
+    // through several pages faster than the writes settle.
+    const updated = await getDb().runTransaction(async (tx) => {
+      const snapshot = await tx.get(ref);
+      if (!snapshot.exists) return false;
+
+      const existing = snapshot.data().pages_visited || '';
+      const pages = existing ? existing.split('|') : [];
+      pages.push(sanitizeCell(page, 80));
+
+      tx.update(ref, {
+        current_page: sanitizeCell(page, 80),
+        pages_visited: pages.join('|').slice(0, 1000),
+        last_page_at: now,
+        last_updated_at: now,
+        written_at: FieldValue.serverTimestamp(),
+      });
+      return true;
+    });
+
+    if (!updated) return res.status(404).json({ message: 'Visit was not found.' });
+    return res.status(200).json({ ok: true });
+  } catch (error) {
+    console.error('Failed to record page view:', error.message);
+    return res.status(503).json({ message: 'Engagement tracking unavailable.' });
   }
-
-  const now = new Date().toISOString();
-  const pages = row.pages_visited ? row.pages_visited.split('|') : [];
-  pages.push(sanitizeCell(page, 80));
-
-  row.current_page = page;
-  row.pages_visited = pages.join('|').slice(0, 1000);
-  row.last_page_at = now;
-  row.last_updated_at = now;
-
-  writeEngagementRows(rows);
-  return res.status(200).json({ ok: true });
 });
 
-app.post('/api/engagement/location', (req, res) => {
+app.post('/api/engagement/location', async (req, res) => {
   const { visitId, status, latitude, longitude, accuracy } = req.body || {};
 
   if (!visitId) {
@@ -544,45 +568,59 @@ app.post('/api/engagement/location', (req, res) => {
   const safeStatus = ['granted', 'denied', 'unavailable', 'error', 'unsupported'].includes(status)
     ? status
     : 'error';
-  const rows = readEngagementRows();
-  const row = rows.find((entry) => entry.visit_id === visitId);
+  const granted = safeStatus === 'granted';
+  const now = new Date().toISOString();
 
-  if (!row) {
-    return res.status(404).json({ message: 'Visit was not found.' });
+  try {
+    const updated = await updateEngagementRow(String(visitId), {
+      last_updated_at: now,
+      location_status: safeStatus,
+      latitude: granted ? latitude : '',
+      longitude: granted ? longitude : '',
+      location_accuracy_m: granted ? accuracy : '',
+      location_captured_at: granted ? now : '',
+    });
+
+    if (!updated) return res.status(404).json({ message: 'Visit was not found.' });
+    return res.status(200).json({ ok: true });
+  } catch (error) {
+    console.error('Failed to record location:', error.message);
+    return res.status(503).json({ message: 'Engagement tracking unavailable.' });
   }
-
-  row.last_updated_at = new Date().toISOString();
-  row.location_status = safeStatus;
-  row.latitude = safeStatus === 'granted' ? latitude : '';
-  row.longitude = safeStatus === 'granted' ? longitude : '';
-  row.location_accuracy_m = safeStatus === 'granted' ? accuracy : '';
-  row.location_captured_at = safeStatus === 'granted' ? row.last_updated_at : '';
-
-  writeEngagementRows(rows);
-  return res.status(200).json({ ok: true });
 });
 
-app.get('/api/engagement/visits.csv', (req, res) => {
+app.get('/api/engagement/visits.csv', async (req, res) => {
   if (!engagementAdminToken || getAuthToken(req) !== engagementAdminToken) {
     return res.status(401).json({ message: 'Unauthorized.' });
   }
 
-  ensureEngagementTable();
-  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  res.setHeader('Content-Disposition', 'attachment; filename="engagement-visits.csv"');
-  return res.sendFile(engagementCsvPath);
+  try {
+    const rows = await readEngagementRows(10000);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="engagement-visits.csv"');
+    return res.send(`${buildCsv(rows)}\n`);
+  } catch (error) {
+    console.error('Failed to export engagement CSV:', error.message);
+    return res.status(503).json({ message: 'Engagement store unavailable.' });
+  }
 });
 
-app.get('/admin/engagement', (req, res) => {
+app.get('/admin/engagement', async (req, res) => {
   const token = getAuthToken(req);
 
   if (!engagementAdminToken || token !== engagementAdminToken) {
     return res.status(401).send('Unauthorized');
   }
 
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
-  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-  return res.send(renderEngagementDashboard(readEngagementRows(), token));
+  try {
+    const rows = await readEngagementRows();
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    return res.send(renderEngagementDashboard(rows, token));
+  } catch (error) {
+    console.error('Failed to render engagement dashboard:', error.message);
+    return res.status(503).send('Engagement store unavailable.');
+  }
 });
 
 app.post('/api/enquiry', async (req, res) => {
@@ -605,9 +643,30 @@ app.post('/api/enquiry', async (req, res) => {
 
     return res.status(200).json({ ok: true });
   } catch (error) {
-    console.error('Failed to send enquiry email:', error);
-    return res.status(500).json({ message: 'Unable to send enquiry right now.' });
+    // Distinguish "not configured" from "send failed" — the two need very
+    // different fixes, and a single opaque 500 hid a missing SMTP_HOST for a
+    // full deploy cycle.
+    const misconfigured = error.message?.startsWith('Missing mail configuration');
+    console.error(
+      misconfigured
+        ? `Enquiry not sent — ${error.message}. Set it via apphosting.yaml / Secret Manager.`
+        : 'Failed to send enquiry email:',
+      misconfigured ? '' : error
+    );
+    return res.status(misconfigured ? 503 : 500).json({
+      message: 'Unable to send enquiry right now.',
+    });
   }
+});
+
+/** Liveness probe plus a quick way to see whether config actually landed. */
+app.get('/api/health', (req, res) => {
+  const mailKeys = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
+  return res.json({
+    ok: true,
+    mailConfigured: mailKeys.every((key) => Boolean(process.env[key])),
+    engagementConfigured: Boolean(engagementAdminToken),
+  });
 });
 
 // Hashed assets (JS/CSS) — safe to cache for a year since filenames change on each build
