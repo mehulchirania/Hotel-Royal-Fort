@@ -5,12 +5,22 @@
 # service. Without this file no environment is passed to the container, which
 # is why /api/enquiry returned 500 "Unable to send enquiry right now."
 #
-# Secret values are NOT stored here — only references to Google Secret Manager.
-# Create them once with:
-#   firebase apphosting:secrets:set SMTP_USER
-#   firebase apphosting:secrets:set SMTP_PASS
-#   firebase apphosting:secrets:set ENGAGEMENT_ADMIN_TOKEN
-#   firebase apphosting:secrets:set ENGAGEMENT_IP_SALT
+# Secret values are NOT stored here. A rollout FAILS if this file references a
+# secret that does not exist yet, so the secret entries are added by the CLI at
+# the moment the secret is created:
+#
+#   firebase apphosting:secrets:set SMTP_USER            --force
+#   firebase apphosting:secrets:set SMTP_PASS            --force
+#   firebase apphosting:secrets:set ENGAGEMENT_ADMIN_TOKEN --force
+#   firebase apphosting:secrets:set ENGAGEMENT_IP_SALT   --force
+#
+# --force creates the secret, grants the backend service account access, and
+# appends the matching `env` entry below. Commit the result and push to roll out.
+#
+# Until SMTP_USER/SMTP_PASS exist, /api/enquiry answers 503 and logs exactly
+# which key is missing. Until ENGAGEMENT_ADMIN_TOKEN exists, the analytics
+# dashboard stays closed (401) — which is the safe default, so never give it a
+# guessable value.
 
 runConfig:
   # A small hotel site: keep one warm instance so the first guest of the day
@@ -43,25 +53,11 @@ env:
     availability:
       - RUNTIME
 
-  # --- Mail delivery (secrets) ---
+  # --- Secrets are appended here by `apphosting:secrets:set --force` ---
   # For Gmail, SMTP_PASS must be an App Password, not the account password.
-  - variable: SMTP_USER
-    secret: SMTP_USER
-    availability:
-      - RUNTIME
-
-  - variable: SMTP_PASS
-    secret: SMTP_PASS
-    availability:
-      - RUNTIME
-
-  # --- Engagement analytics ---
-  - variable: ENGAGEMENT_ADMIN_TOKEN
-    secret: ENGAGEMENT_ADMIN_TOKEN
-    availability:
-      - RUNTIME
-
-  - variable: ENGAGEMENT_IP_SALT
-    secret: ENGAGEMENT_IP_SALT
-    availability:
-      - RUNTIME
+  # Expected shape once created:
+  #
+  #   - variable: SMTP_PASS
+  #     secret: SMTP_PASS
+  #     availability:
+  #       - RUNTIME
