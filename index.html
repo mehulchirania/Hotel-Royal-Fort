@@ -6,16 +6,27 @@
     <title>Hotel Royal Fort Ballari | Comfortable Hotel Stay in Bellary</title>
     <meta name="description" content="Hotel Royal Fort in Ballari offers clean rooms, warm hospitality, convenient location access, and comfortable stays for families, business travellers, and visitors to Bellary." />
     <meta name="theme-color" content="#550a0a" />
+    <link rel="canonical" href="https://hotelroyalfort.in/" />
 
-    <!-- Link previews (WhatsApp, Facebook, X) — guests share hotel links constantly. -->
+    <!-- Link previews (WhatsApp, Facebook, X) — guests share hotel links
+         constantly. These URLs MUST be absolute; scrapers do not resolve
+         relative paths, so a "/images/..." og:image silently yields no preview. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Hotel Royal Fort" />
+    <meta property="og:url" content="https://hotelroyalfort.in/" />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:title" content="Hotel Royal Fort Ballari | Comfortable Hotel Stay in Bellary" />
     <meta property="og:description" content="AC rooms and suites, restaurant and lounge, banquet halls, and free parking on New Trunk Road, Ballari." />
-    <meta property="og:image" content="/images/social-card.jpg" />
+    <meta property="og:image" content="https://hotelroyalfort.in/images/social-card.jpg" />
+    <meta property="og:image:secure_url" content="https://hotelroyalfort.in/images/social-card.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Hotel Royal Fort exterior, Ballari" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hotel Royal Fort Ballari | Comfortable Hotel Stay in Bellary" />
+    <meta name="twitter:description" content="AC rooms and suites, restaurant and lounge, banquet halls, and free parking on New Trunk Road, Ballari." />
+    <meta name="twitter:image" content="https://hotelroyalfort.in/images/social-card.jpg" />
 
     <!-- Applies the saved theme before first paint so a dark-mode reload
          does not flash a white page. Must stay inline and blocking. -->
@@ -31,33 +42,46 @@
       })();
     </script>
 
-    <!-- Structured Data Placeholder -->
+    <!-- Local-business structured data. Values mirror src/data/hotel.ts — keep
+         the two in step, since Google may surface this phone number and address
+         directly in search results. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Hotel",
       "name": "Hotel Royal Fort",
-      "description": "Hotel Royal Fort in Ballari offers clean rooms, warm hospitality, convenient location access, and comfortable stays for families, business travellers, and visitors to Bellary.",
+      "description": "Hotel Royal Fort in Ballari offers AC rooms and suites, restaurant and lounge facilities, banquet halls, and free on-site parking for families, business travellers, and visitors to Bellary.",
+      "url": "https://hotelroyalfort.in/",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "Placeholder Street",
+        "streetAddress": "New Trunk Road, Infantry Road, Housing Board Colony, Sanjay Gandhi Nagar",
         "addressLocality": "Ballari",
         "addressRegion": "Karnataka",
-        "postalCode": "583101",
+        "postalCode": "583104",
         "addressCountry": "IN"
       },
-      "telephone": "+91-0000000000",
+      "telephone": "+91-72597-58888",
+      "email": "gmroyalfort@gmail.com",
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": "15.1394",
-        "longitude": "76.9214"
+        "latitude": "15.148273",
+        "longitude": "76.904129"
       },
+      "hasMap": "https://www.google.com/maps/place/Royal+Fort/@15.147814,76.9012402,16z",
       "image": [
-        "/images/social-card.jpg"
+        "https://hotelroyalfort.in/images/social-card.jpg"
       ],
-      "sameAs": [
-        "https://www.facebook.com/placeholder",
-        "https://www.instagram.com/placeholder"
+      "priceRange": "₹₹",
+      "currenciesAccepted": "INR",
+      "amenityFeature": [
+        { "@type": "LocationFeatureSpecification", "name": "Air conditioning", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Free parking", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Free Wi-Fi", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Restaurant", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Room service", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Banquet hall", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Business centre", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Wheelchair accessible", "value": true }
       ]
     }
     </script>
