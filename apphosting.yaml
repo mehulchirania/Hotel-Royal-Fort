@@ -53,11 +53,13 @@ env:
     availability:
       - RUNTIME
 
-  # --- Secrets are appended here by `apphosting:secrets:set --force` ---
-  # For Gmail, SMTP_PASS must be an App Password, not the account password.
-  # Expected shape once created:
-  #
-  #   - variable: SMTP_PASS
-  #     secret: SMTP_PASS
-  #     availability:
-  #       - RUNTIME
+  - variable: RESEND_FROM
+    value: "Hotel Royal Fort <enquiries@hotelroyalfort.in>"
+    availability:
+      - RUNTIME
+
+  # --- Secrets appended for App Hosting ---
+  - variable: RESEND_API_KEY
+    secret: RESEND_API_KEY
+    availability:
+      - RUNTIME

@@ -1,5 +1,6 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -86,12 +87,22 @@ const ENGAGEMENT_HEADERS = [
   'location_captured_at',
 ];
 
+let resendClient = null;
+
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) return null;
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resendClient;
+}
+
 function getTransporter() {
   const requiredKeys = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
   const missingKey = requiredKeys.find((key) => !process.env[key]);
 
   if (missingKey) {
-    throw new Error(`Missing mail configuration: ${missingKey}`);
+    throw new Error(`Missing mail configuration: RESEND_API_KEY or ${missingKey}`);
   }
 
   return nodemailer.createTransport({
@@ -631,6 +642,30 @@ app.post('/api/enquiry', async (req, res) => {
   }
 
   try {
+    const resend = getResendClient();
+    if (resend) {
+      const from = process.env.RESEND_FROM || 'Hotel Royal Fort <onboarding@resend.dev>';
+      const formattedText = formatEnquiry(req.body);
+
+      const { data, error } = await resend.emails.send({
+        from,
+        to: enquiryToEmail,
+        replyTo: req.body.email || undefined,
+        subject: `${source}: ${name}`,
+        text: formattedText,
+        html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6; color: #333;">
+          <h2 style="color: #1a365d; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">New Website Enquiry</h2>
+          <pre style="background: #f7fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; font-family: monospace; font-size: 14px; white-space: pre-wrap;">${formattedText}</pre>
+        </div>`,
+      });
+
+      if (error) {
+        throw new Error(`Resend error: ${error.message}`);
+      }
+
+      return res.status(200).json({ ok: true, id: data?.id });
+    }
+
     const transporter = getTransporter();
 
     await transporter.sendMail({
@@ -643,13 +678,10 @@ app.post('/api/enquiry', async (req, res) => {
 
     return res.status(200).json({ ok: true });
   } catch (error) {
-    // Distinguish "not configured" from "send failed" — the two need very
-    // different fixes, and a single opaque 500 hid a missing SMTP_HOST for a
-    // full deploy cycle.
     const misconfigured = error.message?.startsWith('Missing mail configuration');
     console.error(
       misconfigured
-        ? `Enquiry not sent — ${error.message}. Set it via apphosting.yaml / Secret Manager.`
+        ? `Enquiry not sent — ${error.message}. Set RESEND_API_KEY or SMTP parameters via apphosting.yaml / Secret Manager.`
         : 'Failed to send enquiry email:',
       misconfigured ? '' : error
     );
@@ -662,9 +694,13 @@ app.post('/api/enquiry', async (req, res) => {
 /** Liveness probe plus a quick way to see whether config actually landed. */
 app.get('/api/health', (req, res) => {
   const mailKeys = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
+  const smtpConfigured = mailKeys.every((key) => Boolean(process.env[key]));
+  const resendConfigured = Boolean(process.env.RESEND_API_KEY);
+
   return res.json({
     ok: true,
-    mailConfigured: mailKeys.every((key) => Boolean(process.env[key])),
+    mailConfigured: resendConfigured || smtpConfigured,
+    mailProvider: resendConfigured ? 'resend' : smtpConfigured ? 'smtp' : 'none',
     engagementConfigured: Boolean(engagementAdminToken),
   });
 });
