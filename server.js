@@ -1,5 +1,4 @@
 import express from 'express';
-import nodemailer from 'nodemailer';
 import { Resend } from 'resend';
 import crypto from 'node:crypto';
 import path from 'node:path';
@@ -95,25 +94,6 @@ function getResendClient() {
     resendClient = new Resend(process.env.RESEND_API_KEY);
   }
   return resendClient;
-}
-
-function getTransporter() {
-  const requiredKeys = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
-  const missingKey = requiredKeys.find((key) => !process.env[key]);
-
-  if (missingKey) {
-    throw new Error(`Missing mail configuration: RESEND_API_KEY or ${missingKey}`);
-  }
-
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
 }
 
 function formatEnquiry(body) {
@@ -641,66 +621,48 @@ app.post('/api/enquiry', async (req, res) => {
     return res.status(400).json({ message: 'Name and phone are required.' });
   }
 
+  const resend = getResendClient();
+  if (!resend) {
+    // Not configured — the client falls back to the WhatsApp click-to-chat link.
+    console.error('Enquiry not sent — RESEND_API_KEY is not set (apphosting.yaml / Secret Manager).');
+    return res.status(503).json({ message: 'Unable to send enquiry right now.' });
+  }
+
   try {
-    const resend = getResendClient();
-    if (resend) {
-      const from = process.env.RESEND_FROM || 'Hotel Royal Fort <onboarding@resend.dev>';
-      const formattedText = formatEnquiry(req.body);
+    const from = process.env.RESEND_FROM || 'Hotel Royal Fort <onboarding@resend.dev>';
+    const formattedText = formatEnquiry(req.body);
 
-      const { data, error } = await resend.emails.send({
-        from,
-        to: enquiryToEmail,
-        replyTo: req.body.email || undefined,
-        subject: `${source}: ${name}`,
-        text: formattedText,
-        html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6; color: #333;">
-          <h2 style="color: #1a365d; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">New Website Enquiry</h2>
-          <pre style="background: #f7fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; font-family: monospace; font-size: 14px; white-space: pre-wrap;">${formattedText}</pre>
-        </div>`,
-      });
-
-      if (error) {
-        throw new Error(`Resend error: ${error.message}`);
-      }
-
-      return res.status(200).json({ ok: true, id: data?.id });
-    }
-
-    const transporter = getTransporter();
-
-    await transporter.sendMail({
-      from: `"Hotel Royal Fort Website" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
+    const { data, error } = await resend.emails.send({
+      from,
       to: enquiryToEmail,
       replyTo: req.body.email || undefined,
       subject: `${source}: ${name}`,
-      text: formatEnquiry(req.body),
+      text: formattedText,
+      html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6; color: #333;">
+        <h2 style="color: #1a365d; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">New Website Enquiry</h2>
+        <pre style="background: #f7fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; font-family: monospace; font-size: 14px; white-space: pre-wrap;">${formattedText}</pre>
+      </div>`,
     });
 
-    return res.status(200).json({ ok: true });
+    if (error) {
+      throw new Error(`Resend error: ${error.message}`);
+    }
+
+    return res.status(200).json({ ok: true, id: data?.id });
   } catch (error) {
-    const misconfigured = error.message?.startsWith('Missing mail configuration');
-    console.error(
-      misconfigured
-        ? `Enquiry not sent — ${error.message}. Set RESEND_API_KEY or SMTP parameters via apphosting.yaml / Secret Manager.`
-        : 'Failed to send enquiry email:',
-      misconfigured ? '' : error
-    );
-    return res.status(misconfigured ? 503 : 500).json({
-      message: 'Unable to send enquiry right now.',
-    });
+    console.error('Failed to send enquiry email:', error);
+    return res.status(500).json({ message: 'Unable to send enquiry right now.' });
   }
 });
 
 /** Liveness probe plus a quick way to see whether config actually landed. */
 app.get('/api/health', (req, res) => {
-  const mailKeys = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
-  const smtpConfigured = mailKeys.every((key) => Boolean(process.env[key]));
   const resendConfigured = Boolean(process.env.RESEND_API_KEY);
 
   return res.json({
     ok: true,
-    mailConfigured: resendConfigured || smtpConfigured,
-    mailProvider: resendConfigured ? 'resend' : smtpConfigured ? 'smtp' : 'none',
+    mailConfigured: resendConfigured,
+    mailProvider: resendConfigured ? 'resend' : 'none',
     engagementConfigured: Boolean(engagementAdminToken),
   });
 });

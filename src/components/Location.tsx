@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Navigation, Compass } from 'lucide-react';
+import { Navigation, Compass } from 'lucide-react';
 import { motion } from 'motion/react';
 import { hotel } from '../data/hotel';
 

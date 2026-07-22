@@ -3,6 +3,11 @@
 Marketing site and enquiry backend for Hotel Royal Fort. A Vite + React front end
 served by a small Express server, deployed on Firebase App Hosting.
 
+**Live:** https://hotelroyalfort.in
+
+**Stack:** React 19 · Vite 6 · Tailwind CSS v4 · Motion · Express · Firestore ·
+Resend (email) · Firebase App Hosting.
+
 ## Run locally
 
 **Prerequisites:** Node.js 20+
@@ -54,10 +59,12 @@ firebase apphosting:secrets:set ENGAGEMENT_IP_SALT --force
 
 Enquiry email is sent through [Resend](https://resend.com). The `RESEND_FROM`
 address (`enquiries@hotelroyalfort.in`) must belong to a domain verified in the
-Resend dashboard, or sends are rejected. If `RESEND_API_KEY` is absent the server
-falls back to SMTP (`SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`); if neither is
-configured, `/api/enquiry` returns 503 and the front end offers a WhatsApp
-fallback instead.
+Resend dashboard, or sends are rejected. If `RESEND_API_KEY` is absent, or a send
+fails, `/api/enquiry` returns a non-2xx and the front end drops the guest into a
+WhatsApp click-to-chat link pre-filled with their enquiry, so no lead is lost.
+
+WhatsApp is click-to-chat (`wa.me`) links only — there is no server-side
+WhatsApp API.
 
 Check what actually landed in the running container:
 
