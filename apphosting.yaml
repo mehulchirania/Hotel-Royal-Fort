@@ -45,3 +45,13 @@ env:
     secret: RESEND_API_KEY
     availability:
       - RUNTIME
+
+  - variable: ENGAGEMENT_ADMIN_TOKEN
+    secret: ENGAGEMENT_ADMIN_TOKEN
+    availability:
+      - RUNTIME
+
+  - variable: ENGAGEMENT_IP_SALT
+    secret: ENGAGEMENT_IP_SALT
+    availability:
+      - RUNTIME
