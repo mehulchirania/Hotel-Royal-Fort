@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
-import { X, Calendar, Home, Phone, Send, MessageCircle } from 'lucide-react';
+import { X, Calendar, Home, Phone, Send, MessageCircle, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { hotel } from '../data/hotel';
-import { submitEnquiry } from '../lib/enquiry';
+import { submitEnquiry, buildWhatsAppEnquiryUrl, type EnquiryPayload } from '../lib/enquiry';
 
 interface Props {
   open: boolean;
   onClose: () => void;
 }
 
+const EMPTY = {
+  name: '',
+  phone: '',
+  checkIn: '',
+  checkOut: '',
+  guests: '1',
+  roomType: hotel.roomTypes[0],
+};
+
 export function EnquiryDrawer({ open, onClose }: Props) {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    checkIn: '',
-    checkOut: '',
-    guests: '1',
-    roomType: hotel.roomTypes[0],
-  });
+  const [formData, setFormData] = useState(EMPTY);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [statusMessage, setStatusMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [whatsAppFallback, setWhatsAppFallback] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,13 +31,18 @@ export function EnquiryDrawer({ open, onClose }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setStatusMessage('');
+    setStatus('idle');
+    setWhatsAppFallback('');
+
+    const payload: EnquiryPayload = { source: 'Floating enquiry drawer', ...formData };
+
     try {
-      await submitEnquiry({ source: 'Floating enquiry drawer', ...formData });
-      setFormData({ name: '', phone: '', checkIn: '', checkOut: '', guests: '1', roomType: hotel.roomTypes[0] });
-      setStatusMessage('Enquiry sent! We will contact you shortly.');
-    } catch (error) {
-      setStatusMessage(error instanceof Error ? error.message : 'Unable to send enquiry right now.');
+      await submitEnquiry(payload);
+      setFormData(EMPTY);
+      setStatus('success');
+    } catch {
+      setWhatsAppFallback(buildWhatsAppEnquiryUrl(payload));
+      setStatus('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -129,8 +137,30 @@ export function EnquiryDrawer({ open, onClose }: Props) {
                   {isSubmitting ? 'Sending…' : 'Send Enquiry'}
                 </button>
 
-                {statusMessage && (
-                  <p className="text-sm font-medium text-gray-700 text-center">{statusMessage}</p>
+                {status === 'success' && (
+                  <div className="flex items-start gap-2 rounded-md bg-emerald-50 border border-emerald-200/80 px-3 py-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                    <p className="text-sm font-medium text-emerald-800">
+                      Enquiry sent! We'll contact you shortly.
+                    </p>
+                  </div>
+                )}
+
+                {status === 'error' && (
+                  <div className="rounded-md bg-amber-50 border border-amber-200/80 px-3 py-2.5 space-y-2.5">
+                    <p className="text-sm font-medium text-amber-900">
+                      Couldn't submit just now — send your details on WhatsApp instead, they're already filled in.
+                    </p>
+                    <a
+                      href={whatsAppFallback}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2.5 rounded-md transition-colors"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      Send on WhatsApp
+                    </a>
+                  </div>
                 )}
               </form>
 

@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
-import { Calendar, Users, Home, Phone, Send, MessageCircle } from 'lucide-react';
+import { Calendar, Home, Phone, Send, MessageCircle, CheckCircle2 } from 'lucide-react';
 import { hotel } from '../data/hotel';
-import { submitEnquiry } from '../lib/enquiry';
+import { submitEnquiry, buildWhatsAppEnquiryUrl, type EnquiryPayload } from '../lib/enquiry';
+
+const EMPTY = {
+  name: '',
+  phone: '',
+  checkIn: '',
+  checkOut: '',
+  guests: '1',
+  roomType: hotel.roomTypes[0],
+};
 
 export function EnquiryFormBar() {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    checkIn: '',
-    checkOut: '',
-    guests: '1',
-    roomType: hotel.roomTypes[0]
-  });
+  const [formData, setFormData] = useState(EMPTY);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [statusMessage, setStatusMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  // Retain a wa.me link built from the guest's input so a failed email send
+  // still reaches the hotel without re-typing.
+  const [whatsAppFallback, setWhatsAppFallback] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,24 +27,19 @@ export function EnquiryFormBar() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setStatusMessage('');
+    setStatus('idle');
+    setWhatsAppFallback('');
+
+    const payload: EnquiryPayload = { source: 'Quick availability enquiry', ...formData };
 
     try {
-      await submitEnquiry({
-        source: 'Quick availability enquiry',
-        ...formData,
-      });
-      setFormData({
-        name: '',
-        phone: '',
-        checkIn: '',
-        checkOut: '',
-        guests: '1',
-        roomType: hotel.roomTypes[0],
-      });
-      setStatusMessage('Thank you for your enquiry. We will contact you shortly.');
-    } catch (error) {
-      setStatusMessage(error instanceof Error ? error.message : 'Unable to send enquiry right now.');
+      await submitEnquiry(payload);
+      setFormData(EMPTY);
+      setStatus('success');
+    } catch {
+      // Do not blame the guest — offer the WhatsApp fallback pre-filled.
+      setWhatsAppFallback(buildWhatsAppEnquiryUrl(payload));
+      setStatus('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -151,8 +151,31 @@ export function EnquiryFormBar() {
             </div>
             
           </form>
-          {statusMessage && (
-            <p className="mt-4 text-sm font-medium text-gray-700">{statusMessage}</p>
+
+          {status === 'success' && (
+            <div className="mt-4 flex items-start gap-2.5 rounded-md bg-emerald-50 border border-emerald-200/80 px-4 py-3">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm font-medium text-emerald-800">
+                Thank you for your enquiry. Our team will contact you shortly to confirm availability.
+              </p>
+            </div>
+          )}
+
+          {status === 'error' && (
+            <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3 rounded-md bg-amber-50 border border-amber-200/80 px-4 py-3">
+              <p className="text-sm font-medium text-amber-900 flex-grow">
+                We couldn't submit the form just now. Send your details on WhatsApp instead — they're already filled in.
+              </p>
+              <a
+                href={whatsAppFallback}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2.5 rounded-md transition-colors"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Send on WhatsApp
+              </a>
+            </div>
           )}
         </div>
       </div>
