@@ -28,16 +28,16 @@
     <meta name="twitter:description" content="AC rooms and suites, restaurant and lounge, banquet halls, and free parking on New Trunk Road, Ballari." />
     <meta name="twitter:image" content="https://hotelroyalfort.in/images/social-card.jpg" />
 
-    <!-- Applies the saved theme before first paint so a dark-mode reload
-         does not flash a white page. Must stay inline and blocking. -->
+    <!-- Applies the saved theme before first paint so a returning dark-mode
+         visitor does not flash light. Light is the default; dark only when the
+         visitor previously toggled to it. Must stay inline and blocking, and
+         must match the default in src/context/theme.tsx. -->
     <script>
       (function () {
         try {
-          var saved = localStorage.getItem('rf_theme');
-          var dark = saved
-            ? saved === 'dark'
-            : window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (dark) document.documentElement.classList.add('dark');
+          if (localStorage.getItem('rf_theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
         } catch (e) {}
       })();
     </script>

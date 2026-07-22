@@ -17,19 +17,16 @@ function readStoredTheme(): Theme | null {
     const saved = localStorage.getItem(STORAGE_KEY);
     return saved === 'dark' || saved === 'light' ? saved : null;
   } catch {
-    // Private browsing / blocked storage — fall back to the OS preference.
+    // Private browsing / blocked storage — treat as no stored preference.
     return null;
   }
 }
 
-function prefersDark() {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(
-    () => readStoredTheme() ?? (prefersDark() ? 'dark' : 'light')
-  );
+  // Light is the default. Dark applies only when a visitor has explicitly
+  // toggled to it before (persisted). We deliberately do NOT follow the OS
+  // prefers-color-scheme — the brand reads as a light, warm-paper site.
+  const [theme, setThemeState] = useState<Theme>(() => readStoredTheme() ?? 'light');
 
   useEffect(() => {
     const root = document.documentElement;
@@ -44,16 +41,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       // Non-fatal: the theme still applies for this session.
     }
   }, [theme]);
-
-  // Follow the OS only while the guest has not made an explicit choice.
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const onChange = (e: MediaQueryListEvent) => {
-      if (!readStoredTheme()) setThemeState(e.matches ? 'dark' : 'light');
-    };
-    mq.addEventListener('change', onChange);
-    return () => mq.removeEventListener('change', onChange);
-  }, []);
 
   const toggleTheme = () => setThemeState((prev) => (prev === 'light' ? 'dark' : 'light'));
 

@@ -47,19 +47,22 @@ Runtime configuration comes from `apphosting.yaml`. Secrets are stored in Google
 Secret Manager, never in the repo:
 
 ```bash
-firebase apphosting:secrets:set SMTP_USER
-firebase apphosting:secrets:set SMTP_PASS
-firebase apphosting:secrets:set ENGAGEMENT_ADMIN_TOKEN
-firebase apphosting:secrets:set ENGAGEMENT_IP_SALT
+firebase apphosting:secrets:set RESEND_API_KEY --force
+firebase apphosting:secrets:set ENGAGEMENT_ADMIN_TOKEN --force
+firebase apphosting:secrets:set ENGAGEMENT_IP_SALT --force
 ```
 
-For Gmail, `SMTP_PASS` must be an [App Password](https://support.google.com/accounts/answer/185833),
-not the account password.
+Enquiry email is sent through [Resend](https://resend.com). The `RESEND_FROM`
+address (`enquiries@hotelroyalfort.in`) must belong to a domain verified in the
+Resend dashboard, or sends are rejected. If `RESEND_API_KEY` is absent the server
+falls back to SMTP (`SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`); if neither is
+configured, `/api/enquiry` returns 503 and the front end offers a WhatsApp
+fallback instead.
 
 Check what actually landed in the running container:
 
 ```
-GET /api/health   ->  { ok, mailConfigured, engagementConfigured }
+GET /api/health   ->  { ok, mailConfigured, mailProvider, engagementConfigured }
 ```
 
 ## Engagement data
