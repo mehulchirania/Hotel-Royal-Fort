@@ -123,6 +123,47 @@ function formatEnquiry(body) {
     .join('\n');
 }
 
+async function sendWhatsAppAlert(body) {
+  const phoneNumberId = process.env.WHATSAPP_PHONE_NUMBER_ID;
+  const accessToken = process.env.WHATSAPP_ACCESS_TOKEN;
+  const recipient = process.env.WHATSAPP_RECIPIENT_PHONE;
+
+  if (!phoneNumberId || !accessToken || !recipient) {
+    return false;
+  }
+
+  try {
+    const formattedText = formatEnquiry(body);
+    const messageText = `🏨 *New Website Enquiry*\n\n${formattedText}`;
+
+    const response = await fetch(`https://graph.facebook.com/v19.0/${phoneNumberId}/messages`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messaging_product: 'whatsapp',
+        recipient_type: 'individual',
+        to: recipient.replace(/[^0-9]/g, ''),
+        type: 'text',
+        text: { preview_url: false, body: messageText },
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      console.error('Meta WhatsApp Cloud API error:', errorData);
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.error('Failed to send WhatsApp alert:', err.message);
+    return false;
+  }
+}
+
 function sanitizeCell(value, maxLength = 500) {
   if (value === undefined || value === null) return '';
   return String(value).replace(/[\r\n]+/g, ' ').trim().slice(0, maxLength);
@@ -642,6 +683,11 @@ app.post('/api/enquiry', async (req, res) => {
   }
 
   try {
+    // Send instant WhatsApp notification if configured (non-blocking)
+    sendWhatsAppAlert(req.body).catch((err) => {
+      console.error('WhatsApp alert error:', err.message);
+    });
+
     const resend = getResendClient();
     if (resend) {
       const from = process.env.RESEND_FROM || 'Hotel Royal Fort <onboarding@resend.dev>';
@@ -696,11 +742,17 @@ app.get('/api/health', (req, res) => {
   const mailKeys = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
   const smtpConfigured = mailKeys.every((key) => Boolean(process.env[key]));
   const resendConfigured = Boolean(process.env.RESEND_API_KEY);
+  const whatsAppConfigured = Boolean(
+    process.env.WHATSAPP_PHONE_NUMBER_ID &&
+      process.env.WHATSAPP_ACCESS_TOKEN &&
+      process.env.WHATSAPP_RECIPIENT_PHONE
+  );
 
   return res.json({
     ok: true,
     mailConfigured: resendConfigured || smtpConfigured,
     mailProvider: resendConfigured ? 'resend' : smtpConfigured ? 'smtp' : 'none',
+    whatsAppConfigured,
     engagementConfigured: Boolean(engagementAdminToken),
   });
 });

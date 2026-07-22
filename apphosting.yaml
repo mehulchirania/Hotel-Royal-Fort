@@ -63,3 +63,9 @@ env:
     secret: RESEND_API_KEY
     availability:
       - RUNTIME
+
+  # Meta WhatsApp Cloud API (1,000 free conversations/month)
+  # Set these via Firebase Secret Manager when ready:
+  #   firebase apphosting:secrets:set WHATSAPP_PHONE_NUMBER_ID  --force
+  #   firebase apphosting:secrets:set WHATSAPP_ACCESS_TOKEN     --force
+  #   firebase apphosting:secrets:set WHATSAPP_RECIPIENT_PHONE   --force
