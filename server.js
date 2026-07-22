@@ -1,9 +1,10 @@
 import express from 'express';
 import { Resend } from 'resend';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { initializeApp, applicationDefault, getApps } from 'firebase-admin/app';
+import { initializeApp, applicationDefault, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 import 'dotenv/config';
 
@@ -38,8 +39,20 @@ function getDb() {
 
   try {
     if (getApps().length === 0) {
-      // On App Hosting the runtime service account is picked up automatically.
-      initializeApp({ credential: applicationDefault() });
+      const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT || 'hotel-royal-fort-498215';
+      const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || path.join(__dirname, 'service-account.json');
+
+      let credential;
+      if (fs.existsSync(keyPath)) {
+        credential = cert(keyPath);
+      } else {
+        credential = applicationDefault();
+      }
+
+      initializeApp({
+        credential,
+        projectId,
+      });
     }
     firestore = getFirestore();
     firestore.settings({ ignoreUndefinedProperties: true });
