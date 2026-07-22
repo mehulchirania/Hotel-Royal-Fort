@@ -42,11 +42,14 @@ export function Hero() {
               Hotel Royal Fort offers AC rooms and suites, warm hospitality, restaurant and lounge facilities, and convenient access for families, business travellers, and visitors to Ballari.
             </p>
             
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10">
-              <a href={hotel.goibiboUrl} target="_blank" rel="noopener noreferrer" className="bg-maroon-800 text-white px-8 py-3.5 rounded-md font-medium shadow-md hover:bg-maroon-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-10">
+              <a href={hotel.goibiboUrl} target="_blank" rel="noopener noreferrer" className="bg-maroon-800 text-white px-6 py-3.5 rounded-md font-medium shadow-md hover:bg-maroon-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
                 Book on Goibibo
               </a>
-              <a href="#quick-enquiry" className="text-maroon-800 bg-maroon-50 px-8 py-3.5 rounded-md font-medium hover:bg-maroon-100 transition-colors border border-maroon-100">
+              <a href={hotel.makeMyTripUrl} target="_blank" rel="noopener noreferrer" className="bg-amber-600 text-white px-6 py-3.5 rounded-md font-medium shadow-md hover:bg-amber-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                Book on MakeMyTrip
+              </a>
+              <a href="#quick-enquiry" className="text-maroon-800 bg-maroon-50 px-6 py-3.5 rounded-md font-medium hover:bg-maroon-100 transition-colors border border-maroon-100">
                 Send Enquiry
               </a>
               {/* Social proof, not a third CTA — reads as a quiet link so the

@@ -20,6 +20,8 @@ export const hotel = {
     'https://www.google.com/maps/place/Royal+Fort/@15.147814,76.9012402,16z/data=!3m1!4b1!4m9!3m8!1s0x3bb7132bed88334f:0x57a0afaf84844c62!5m2!4m1!1i2!8m2!3d15.1478088!4d76.9038151!16s%2Fg%2F11ksl0xm6m?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D',
   goibiboUrl:
     'https://www.goibibo.com/hotels/hotel-details/?checkin=20260606&checkout=20260607&roomString=1-2-0&searchText=Hotel%20Royal%20Fort&locusId=CTBELL&locusType=city&cityCode=CTBELL&cc=IN&_uCurrency=INR&vcid=CTBELL&giHotelId=3415246453017752306&mmtId=20130416155141839&topHtlId=20130416155141839&sType=hotel',
+  makeMyTripUrl:
+    'https://www.makemytrip.com/hotels/hotel-details?hotelId=20130416155141839&_uCurrency=INR&checkin=07232026&checkout=07242026&city=CTBELL&country=IN&lat=15.14849&lng=76.90385&locusId=CTBELL&locusType=city&rank=1&regionNearByExp=3&roomStayQualifier=2e0e&rsc=1e2e0e&searchText=Hotel%20Royal%20Fort&topHtlId=20130416155141839&viewType=BUDGET',
   mapEmbedUrl:
     'https://maps.google.com/maps?q=15.148273,76.904129%20(Hotel%20Royal%20Fort%2C%20Ballari)&z=16&output=embed',
   landmarks: [

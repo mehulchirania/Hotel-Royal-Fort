@@ -140,15 +140,26 @@ export function Rooms() {
                     <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
                   </button>
                 ) : (
-                  <a
-                    href={hotel.goibiboUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-3 px-4 bg-maroon-50 text-maroon-800 font-semibold rounded-md border border-maroon-100 flex items-center justify-center gap-2 hover:bg-maroon-800 hover:text-white transition-colors group/btn"
-                  >
-                    Book on Goibibo
-                    <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-                  </a>
+                  <div className="grid grid-cols-2 gap-2">
+                    <a
+                      href={hotel.goibiboUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-2.5 px-3 bg-maroon-50 text-maroon-800 font-medium text-sm rounded-md border border-maroon-100 flex items-center justify-center gap-1.5 hover:bg-maroon-800 hover:text-white transition-colors group/btn text-center"
+                    >
+                      Book Goibibo
+                      <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5" />
+                    </a>
+                    <a
+                      href={hotel.makeMyTripUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-2.5 px-3 bg-amber-50 text-amber-900 font-medium text-sm rounded-md border border-amber-200 flex items-center justify-center gap-1.5 hover:bg-amber-700 hover:text-white transition-colors group/btn text-center"
+                    >
+                      Book MakeMyTrip
+                      <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5" />
+                    </a>
+                  </div>
                 )}
               </div>
             </motion.div>
@@ -156,7 +167,7 @@ export function Rooms() {
         </div>
 
         <p className="text-center text-xs text-gray-500 mt-8">
-          Goibibo prices can change by date, occupancy, taxes, and offers. Suite tariff is listed as Rs. 5,500 + taxes for direct enquiries.
+          OTA prices (Goibibo / MakeMyTrip) can change by date, occupancy, taxes, and offers. Suite tariff is listed as Rs. 5,500 + taxes for direct enquiries.
         </p>
       </div>
     </section>
