@@ -56,7 +56,7 @@ export function Rooms() {
     <section id="rooms" className="py-20 bg-gray-50 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Rooms Designed for Comfort</h2>
+          <h1 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Rooms Designed for Comfort</h1>
           <p className="text-gray-600">Choose from {hotel.roomTypes.join(', ')} with AC comfort, in-room essentials, and Goibibo booking support.</p>
         </div>
 

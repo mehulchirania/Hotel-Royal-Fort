@@ -75,3 +75,21 @@ With `ENGAGEMENT_ADMIN_TOKEN` set:
 - CSV export — `/api/engagement/visits.csv?token=75a432662ecdfe6a39ef7842efd5bf26`
 
 Because this collects visitor location and a derived IP identifier, keep the privacy policy in `src/data/legal.ts` accurate if you change what is captured.
+
+## Privacy & data retention
+
+- Analytics (`/api/engagement/*`) runs **only after the visitor clicks Accept** on the privacy banner; Reject or later withdrawal deletes the stored visit.
+- Enquiry forms require an explicit consent tick and an 18+/parent-or-guardian declaration; the server rejects submissions without them.
+- Engagement rows are deleted after `ENGAGEMENT_RETENTION_DAYS` (default 90) by a purge job in `server.js`. Because Cloud Run can scale to zero, also enable a Firestore TTL policy on the `expire_at` field of `engagementVisits`:
+  `gcloud firestore fields ttls update expire_at --collection-group=engagementVisits --enable-ttl`
+- Enquiry emails live in the hotel inbox; delete them after 12 months to match the policy in `src/data/legal.ts`.
+- Set the real name of the data-protection / grievance contact in `src/data/hotel.ts` (`dataContact.name`).
+- The admin dashboard: open `/admin/engagement?token=…` once; the token is swapped for an HttpOnly cookie and removed from the URL.
+
+## SEO
+
+- One real URL per page (`/rooms`, `/dining`, …), defined with titles and descriptions in `src/data/seo-pages.json`. `server.js` writes each page's title, description, canonical, Open Graph/Twitter tags and breadcrumb JSON-LD into the HTML; the client keeps them in sync on navigation.
+- Old `/?page=rooms` links 301 to `/rooms`; `www` and `http` redirect to `https://hotelroyalfort.in`; unknown paths return 404 + `noindex`; `/admin` and `/api` send `X-Robots-Tag: noindex`.
+- `public/sitemap.xml` (with images), `public/robots.txt`, `public/favicon.svg`. After changing pages, update the sitemap too.
+- Google Search Console: either verify with a DNS TXT record (recommended) or set env `GOOGLE_SITE_VERIFICATION` to the meta-tag token; then submit `https://hotelroyalfort.in/sitemap.xml`.
+- After each deploy: `npm run indexnow` (Bing/Yandex).

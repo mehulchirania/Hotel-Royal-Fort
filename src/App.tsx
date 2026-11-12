@@ -1,7 +1,9 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ChevronLeft } from 'lucide-react';
-import { NavProvider, useNav, type Page } from './context/nav';
+import { NavProvider, NavLink, useNav, type Page } from './context/nav';
+import { PrivacyProvider } from './context/privacy';
+import { hotel } from './data/hotel';
 import { ThemeProvider } from './context/theme';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -19,6 +21,7 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { FloatingActions } from './components/FloatingActions';
 import { EngagementTracker } from './components/EngagementTracker';
+import { ConsentBanner } from './components/ConsentBanner';
 
 const PAGE_LABELS: Record<Page, string> = {
   home: 'Home',
@@ -30,6 +33,7 @@ const PAGE_LABELS: Record<Page, string> = {
   reviews: 'Guest Reviews',
   location: 'Location',
   contact: 'Contact',
+  notfound: 'Page not found',
 };
 
 function PageBreadcrumb() {
@@ -49,6 +53,20 @@ function PageBreadcrumb() {
         <span aria-current="page" className="text-gray-900 font-semibold">{PAGE_LABELS[currentPage]}</span>
       </div>
     </nav>
+  );
+}
+
+function NotFound() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+      <h1 className="font-serif text-3xl sm:text-4xl font-bold text-gray-900 mb-4">That page isn&apos;t here.</h1>
+      <p className="text-gray-600 max-w-xl mb-8">
+        The address may have changed. Start from the home page or call the front desk on {hotel.phoneDisplay}.
+      </p>
+      <NavLink page="home" className="inline-block bg-maroon-800 text-white font-medium px-6 py-3 rounded-md hover:bg-maroon-700 transition-colors">
+        Back to Hotel Royal Fort
+      </NavLink>
+    </div>
   );
 }
 
@@ -80,6 +98,7 @@ function PageContent() {
         {currentPage === 'reviews' && <Reviews />}
         {currentPage === 'location' && <Location />}
         {currentPage === 'contact' && <Contact />}
+        {currentPage === 'notfound' && <NotFound />}
       </motion.div>
     </AnimatePresence>
   );
@@ -89,19 +108,22 @@ export default function App() {
   return (
     <ThemeProvider>
       <NavProvider>
-        <div className="font-sans antialiased text-gray-900 bg-gray-50 flex flex-col min-h-screen">
-          <Navbar />
-          {/* Matches the unscrolled header: 40px logo + 2×16px padding + 1px border */}
-          <div className="pt-[73px]">
-            <PageBreadcrumb />
-            <main className="flex-grow pb-20 md:pb-0">
-              <PageContent />
-            </main>
-            <Footer />
+        <PrivacyProvider>
+          <div className="font-sans antialiased text-gray-900 bg-gray-50 flex flex-col min-h-screen">
+            <Navbar />
+            {/* Matches the unscrolled header: 40px logo + 2×16px padding + 1px border */}
+            <div className="pt-[73px]">
+              <PageBreadcrumb />
+              <main className="flex-grow pb-20 md:pb-0">
+                <PageContent />
+              </main>
+              <Footer />
+            </div>
+            <FloatingActions />
+            <EngagementTracker />
+            <ConsentBanner />
           </div>
-          <FloatingActions />
-          <EngagementTracker />
-        </div>
+        </PrivacyProvider>
       </NavProvider>
     </ThemeProvider>
   );

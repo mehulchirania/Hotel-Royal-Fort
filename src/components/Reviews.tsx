@@ -265,7 +265,7 @@ export function Reviews() {
                           {review.author}
                         </h4>
                         {review.verified && (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" title="Verified Reviewer" />
+                          <span title="Verified Reviewer"><CheckCircle2 className="w-3.5 h-3.5 text-blue-600" aria-label="Verified Reviewer" /></span>
                         )}
                       </div>
                       <div className="flex items-center gap-2 mt-0.5">

@@ -3,6 +3,7 @@ import { X, Calendar, Home, Phone, Send, MessageCircle, CheckCircle2 } from 'luc
 import { motion, AnimatePresence } from 'motion/react';
 import { hotel } from '../data/hotel';
 import { submitEnquiry, buildWhatsAppEnquiryUrl, type EnquiryPayload } from '../lib/enquiry';
+import { ConsentFields, EMPTY_CONSENT } from './ConsentFields';
 
 interface Props {
   open: boolean;
@@ -20,6 +21,8 @@ const EMPTY = {
 
 export function EnquiryDrawer({ open, onClose }: Props) {
   const [formData, setFormData] = useState(EMPTY);
+  const [consent, setConsent] = useState(EMPTY_CONSENT);
+  const [website, setWebsite] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [whatsAppFallback, setWhatsAppFallback] = useState('');
@@ -34,11 +37,18 @@ export function EnquiryDrawer({ open, onClose }: Props) {
     setStatus('idle');
     setWhatsAppFallback('');
 
-    const payload: EnquiryPayload = { source: 'Floating enquiry drawer', ...formData };
+    const payload: EnquiryPayload = {
+      source: 'Floating enquiry drawer',
+      ...formData,
+      consent: 'yes',
+      ageConfirmed: 'yes',
+      website,
+    };
 
     try {
       await submitEnquiry(payload);
       setFormData(EMPTY);
+      setConsent(EMPTY_CONSENT);
       setStatus('success');
     } catch {
       setWhatsAppFallback(buildWhatsAppEnquiryUrl(payload));
@@ -131,7 +141,9 @@ export function EnquiryDrawer({ open, onClose }: Props) {
                   </div>
                 </div>
 
-                <button type="submit" disabled={isSubmitting}
+                <div className="relative"><ConsentFields idPrefix="enq" value={consent} onChange={setConsent} website={website} onWebsiteChange={setWebsite} /></div>
+
+<button type="submit" disabled={isSubmitting}
                   className="w-full bg-maroon-800 text-white font-medium py-2.5 rounded-md flex items-center justify-center gap-2 hover:bg-maroon-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed">
                   <Send className="w-4 h-4" />
                   {isSubmitting ? 'Sending…' : 'Send Enquiry'}

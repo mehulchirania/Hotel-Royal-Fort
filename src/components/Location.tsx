@@ -13,7 +13,7 @@ export function Location() {
         <div className="grid lg:grid-cols-5 gap-10 items-center">
           
           <div className="lg:col-span-2 order-2 lg:order-1">
-            <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Explore Ballari from Hotel Royal Fort</h2>
+            <h1 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Explore Ballari from Hotel Royal Fort</h1>
             <p className="text-gray-600 mb-8 leading-relaxed">
               Located on New Trunk Road near Siddartha Nagar, Hotel Royal Fort keeps guests close to Ballari Fort views, rail and bus connectivity, city services, and local dining.
             </p>

@@ -14,59 +14,124 @@ export interface LegalDoc {
   sections: LegalSection[];
 }
 
-export type LegalDocId = 'privacy' | 'terms' | 'cancellation' | 'faq';
+export type LegalDocId = 'privacy' | 'cookies' | 'terms' | 'cancellation' | 'faq';
 
-const UPDATED = 'July 2026';
+const UPDATED = 'November 2026';
+
+const contactLine = hotel.dataContact.name
+  ? `${hotel.dataContact.name}, ${hotel.dataContact.role}`
+  : hotel.dataContact.role;
 
 export const legalDocs: Record<LegalDocId, LegalDoc> = {
   privacy: {
     id: 'privacy',
     title: 'Privacy Policy',
     updated: UPDATED,
-    intro: `This policy explains what information ${hotel.name}, ${hotel.city}, collects when you use this website or enquire about a stay, how we use it, and the choices you have.`,
+    intro: `This policy explains what personal data ${hotel.name}, ${hotel.city}, collects when you use this website or enquire about a stay, why, how long we keep it, and the rights you have under the Digital Personal Data Protection Act, 2023 and other applicable Indian law.`,
     sections: [
+      {
+        heading: 'Who is responsible',
+        body: `${hotel.name}, ${hotel.address}, is the data fiduciary for the information described here. Our contact for privacy questions and complaints is ${contactLine}, at ${hotel.dataContact.email} or ${hotel.phoneDisplay}.`,
+      },
       {
         heading: 'Information we collect',
         body: 'We only collect what we need to respond to an enquiry or host your stay:',
         bullets: [
-          'Details you submit through the enquiry form — name, phone number, email address, dates of stay, room preference, and any message you write.',
-          'Information you share when you call or message us on WhatsApp.',
-          'Identity and address details required at check-in under applicable Indian hospitality regulations.',
-          'Basic technical data such as pages visited and approximate location, used only to understand how the site is used.',
+          'Enquiry forms — name, phone number, email address (where asked), dates of stay, room preference, number of guests and any message you write. We collect these only after you tick the consent box.',
+          'Calls and WhatsApp — whatever you share when you contact us.',
+          'At check-in — identity and address details required under applicable Indian hospitality regulations.',
+          'Optional site analytics — pages viewed, referrer, device and browser type, language, time zone and a one-way hashed form of your IP address. This is collected ONLY if you click Accept on the privacy banner.',
+          'Optional location — approximate or precise location, ONLY if you accept analytics and then separately allow your browser to share it.',
         ],
       },
       {
-        heading: 'How we use your information',
+        heading: 'Why we use it (purpose and consent)',
         bullets: [
-          'To respond to enquiries, confirm availability, and share tariffs.',
-          'To manage your reservation, stay, and any event or banquet booking.',
-          'To meet legal, tax, and guest-record obligations.',
-          'To improve the website and the accuracy of the information we publish.',
+          'To respond to enquiries, confirm availability and share tariffs — on the basis of your consent given in the form.',
+          'To manage your reservation, stay and any event or banquet booking.',
+          'To meet legal, tax and guest-record obligations.',
+          'To understand how the website is used and improve it — only with your consent to analytics.',
         ],
+      },
+      {
+        heading: 'Withdrawing consent',
+        body: `You can withdraw consent at any time. Analytics: use “Privacy settings” in the footer and choose Reject — your analytics record for the current visit is deleted. Enquiries: write to ${hotel.dataContact.email} and we will stop using and delete the details, except where the law requires us to keep them. Withdrawal does not affect use before it was made.`,
+      },
+      {
+        heading: 'Children and under-18s',
+        body: 'This website is not directed at children, and we do not knowingly collect data from anyone under 18 without a parent or guardian’s verifiable consent. Enquiry forms require you to confirm that you are 18 or older, or that you are the parent or legal guardian submitting on the child’s behalf. We do not track, profile or send marketing to children. Rooms are booked by adults only; a minor guest must be accompanied by a parent or guardian at check-in. If you believe a child has given us data, contact us and we will delete it.',
       },
       {
         heading: 'What we do not do',
         bullets: [
-          'We do not sell or rent your personal information to anyone.',
+          'We do not sell or rent your personal information.',
           'We do not send marketing messages unless you have asked us to.',
-          'We do not collect payment card details on this website. Bookings made through Goibibo or any other travel partner are handled on their platform, under their privacy policy.',
+          'We do not collect payment card details on this website. Bookings made through Goibibo, MakeMyTrip or any other travel partner are handled on their platform, under their privacy policy.',
         ],
       },
       {
-        heading: 'Sharing with others',
-        body: 'We share information only where it is necessary: with travel partners you chose to book through, with service providers who help us run the hotel, and with authorities where the law requires it.',
+        heading: 'Who we share it with',
+        body: 'Only where necessary: travel partners you chose to book through; service providers that run the site for us (Google Cloud / Firebase for hosting and analytics storage, Resend for delivering enquiry emails, Gmail to receive them, Google Fonts and Google Maps which load when you view those parts of the site); and authorities where the law requires it. Some of these providers process data outside India.',
       },
       {
         heading: 'How long we keep it',
-        body: 'Enquiry records are kept only as long as needed to follow up. Guest and billing records are retained for the period required by applicable law and tax rules.',
+        bullets: [
+          'Enquiry details — kept for up to 12 months after the enquiry so we can follow up, then deleted.',
+          'Site analytics records — automatically deleted after 90 days.',
+          'Guest registers and billing records — kept for the period required by applicable law and tax rules, then deleted.',
+          'Anything you ask us to delete — removed within 30 days unless the law requires us to retain it.',
+        ],
       },
       {
-        heading: 'Your choices',
-        body: `You can ask us to correct or delete the personal information we hold about you, or ask what we hold, by writing to ${hotel.email} or calling ${hotel.phoneDisplay}. We will respond within a reasonable time.`,
+        heading: 'How we protect it',
+        body: 'The site is served over HTTPS only. Forms are validated on our server, rate-limited and protected against automated abuse. Analytics data is held in a private database with no public access, and the admin view is restricted to authorised staff. No system is perfectly secure; if a breach affecting your data occurs we will notify you and the Data Protection Board as the law requires.',
+      },
+      {
+        heading: 'Your rights',
+        body: `You may ask to access the personal data we hold about you, have it corrected or erased, nominate someone to exercise these rights for you, and complain about how we handle it. Write to ${hotel.dataContact.email} or call ${hotel.phoneDisplay}; we will respond within 30 days. If we have not resolved your complaint you may approach the Data Protection Board of India.`,
       },
       {
         heading: 'Contact us',
-        body: `${hotel.name}, ${hotel.address}. Phone ${hotel.phoneDisplay}. Email ${hotel.email}.`,
+        body: `${contactLine}. ${hotel.name}, ${hotel.address}. Phone ${hotel.phoneDisplay}. Email ${hotel.dataContact.email}.`,
+      },
+    ],
+  },
+
+  cookies: {
+    id: 'cookies',
+    title: 'Cookie & Storage Notice',
+    updated: UPDATED,
+    intro: 'What this website stores on your device, and the choices you have. This site does not use advertising or cross-site tracking cookies.',
+    sections: [
+      {
+        heading: 'Essential storage (always on)',
+        bullets: [
+          'rf_theme — remembers light or dark display. Stored in your browser’s localStorage until you clear it.',
+          'rf_consent_v1 — remembers your Accept / Reject choice on the privacy banner, for about 6 months.',
+        ],
+      },
+      {
+        heading: 'Optional analytics (only if you accept)',
+        bullets: [
+          'When you click Accept, the site sends one anonymous visit record to our server (pages viewed, referrer, device and browser details, hashed IP address) and records each page you open. Nothing is sent before you accept.',
+          'royalFortLocationConsent — remembers your answer if we ask to use your location. Location is requested separately and only after you accept analytics.',
+        ],
+      },
+      {
+        heading: 'Third-party content',
+        body: 'Google Fonts (typefaces) and Google Maps (embedded map on the Location page) are loaded from Google servers, which receive your IP address and browser details when those load. Their own policies apply.',
+      },
+      {
+        heading: 'Changing your mind',
+        body: 'Use “Privacy settings” in the footer at any time to accept or reject analytics. Rejecting stops collection and deletes your current visit record. You can also clear this site’s data from your browser settings.',
+      },
+      {
+        heading: 'Children',
+        body: 'If you are under 18, please ask a parent or guardian before accepting analytics. We do not knowingly track children.',
+      },
+      {
+        heading: 'Questions',
+        body: `Contact ${contactLine} at ${hotel.dataContact.email}.`,
       },
     ],
   },
@@ -210,4 +275,4 @@ export const legalDocs: Record<LegalDocId, LegalDoc> = {
   },
 };
 
-export const legalDocOrder: LegalDocId[] = ['privacy', 'terms', 'cancellation', 'faq'];
+export const legalDocOrder: LegalDocId[] = ['privacy', 'cookies', 'terms', 'cancellation', 'faq'];

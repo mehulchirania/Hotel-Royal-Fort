@@ -27,9 +27,9 @@ export function Events() {
               <Users className="w-4 h-4" />
               Events & Celebrations
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-5">
+            <h1 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-5">
               Banquet Halls & Outdoor Event Space
-            </h2>
+            </h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-8">
               Hotel Royal Fort offers 3 banquet halls for event bookings, with an additional outdoor area for larger gatherings, dining setups, and celebrations.
             </p>

@@ -36,6 +36,17 @@ type NavigatorWithHints = Navigator & {
 
 let visitRequest: Promise<string | null> | null = null;
 
+/** Withdraw consent: delete the stored visit and allow a fresh one later. */
+export function deleteEngagementVisit(visitId: string) {
+  visitRequest = null;
+  return fetch('/api/engagement/visit', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ visitId }),
+    keepalive: true,
+  }).catch(() => undefined);
+}
+
 function getUtmParams() {
   const params = new URLSearchParams(window.location.search);
   return {

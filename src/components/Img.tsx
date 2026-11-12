@@ -41,6 +41,8 @@ export function Img({ name, alt, className = '', sizes = '100vw', priority = fal
       srcSet={asset.srcSet}
       sizes={sizes}
       alt={alt}
+      width={1000}
+      height={Math.round(1000 / asset.aspectRatio)}
       loading={priority ? 'eager' : 'lazy'}
       // fetchPriority is still missing from React's JSX typings in some versions.
       {...({ fetchpriority: priority ? 'high' : 'auto' } as Record<string, string>)}

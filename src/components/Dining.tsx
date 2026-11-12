@@ -32,7 +32,7 @@ export function Dining() {
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
           
           <div className="flex-1 text-center lg:text-left">
-            <h2 className="font-serif text-3xl sm:text-4xl text-white font-bold mb-6">Dining & Food Options</h2>
+            <h1 className="font-serif text-3xl sm:text-4xl text-white font-bold mb-6">Dining & Food Options</h1>
             <p className="text-maroon-100/90 text-lg mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
               Enjoy convenient food options during your stay. Hotel Royal Fort's listing includes a restaurant, lounge, bar, and room service, with local restaurants nearby around {hotel.shortAddress}.
             </p>

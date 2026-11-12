@@ -7,6 +7,16 @@ export const hotel = {
   phoneTel: '+917259758888',
   whatsapp: '917259758888',
   email: 'gmroyalfort@gmail.com',
+  /**
+   * Named contact for privacy requests and complaints (DPDP Act 2023
+   * "grievance officer"). TODO: replace `name` with the real person — the
+   * role is shown on the site until then.
+   */
+  dataContact: {
+    role: 'General Manager (Data Protection & Grievance Contact)',
+    name: '',
+    email: 'gmroyalfort@gmail.com',
+  },
   rating: '4.0',
   reviewCount: '5,712',
   category: '3-star hotel',

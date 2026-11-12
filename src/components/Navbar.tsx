@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, Phone, MessageCircle, MapPin, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { hotel } from '../data/hotel';
-import { useNav, type Page } from '../context/nav';
+import { useNav, NavLink, type Page } from '../context/nav';
 import { useTheme } from '../context/theme';
 
 /** Sun/moon swap that rotates and fades rather than popping between glyphs. */
@@ -68,7 +68,7 @@ export function Navbar() {
         <div className="flex justify-between items-center gap-6 lg:gap-10">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <button onClick={() => handleNav('home')} className="flex items-center gap-2.5 group">
+            <NavLink page="home" aria-label="Hotel Royal Fort, home" onNavigate={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 group">
               <div className="w-10 h-10 brand-mark rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
                 <span className="font-serif text-xl font-bold">RF</span>
               </div>
@@ -76,7 +76,7 @@ export function Navbar() {
                 <span className="font-serif text-xl font-bold text-gray-900 leading-none whitespace-nowrap">Hotel Royal Fort</span>
                 <span className="text-[10px] uppercase tracking-widest text-maroon-700 font-medium mt-0.5">Ballari</span>
               </div>
-            </button>
+            </NavLink>
           </div>
 
           {/* Desktop Nav */}
@@ -84,9 +84,9 @@ export function Navbar() {
               silently clipped by the body's overflow-x:hidden. */}
           <nav className="hidden lg:flex items-center gap-x-4 xl:gap-x-6">
             {navLinks.map((link) => (
-              <button
+              <NavLink
                 key={link.name}
-                onClick={() => handleNav(link.page)}
+                page={link.page}
                 /* border-b-2 lives on every state so the active link does not
                    nudge the row by 2px when it changes */
                 className={`relative font-medium text-sm whitespace-nowrap pb-1 border-b-2 transition-colors ${
@@ -96,7 +96,7 @@ export function Navbar() {
                 }`}
               >
                 {link.name}
-              </button>
+              </NavLink>
             ))}
           </nav>
 
@@ -165,9 +165,10 @@ export function Navbar() {
           >
             <div className="px-4 pt-2 pb-6 space-y-1 shadow-inner">
               {navLinks.map((link) => (
-                <button
+                <NavLink
                   key={link.name}
-                  onClick={() => handleNav(link.page)}
+                  page={link.page}
+                  onNavigate={() => setMobileMenuOpen(false)}
                   className={`w-full text-left block px-3 py-3 rounded-md text-base font-medium transition-colors ${
                     currentPage === link.page
                       ? 'text-maroon-800 bg-maroon-50'
@@ -175,7 +176,7 @@ export function Navbar() {
                   }`}
                 >
                   {link.name}
-                </button>
+                </NavLink>
               ))}
               <div className="mt-6 space-y-3 px-3">
                 <a href={`tel:${hotel.phoneTel}`} className="w-full flex items-center justify-center gap-2 bg-maroon-800 text-white px-4 py-3 text-base font-medium rounded-md shadow-sm">

@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MapPin, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useNav } from '../context/nav';
+import { usePrivacy } from '../context/privacy';
 import {
+  deleteEngagementVisit,
   recordEngagementLocation,
   recordEngagementPage,
   startEngagementVisit,
@@ -25,12 +27,16 @@ function getLocationStatus(error: GeolocationPositionError) {
 
 export function EngagementTracker() {
   const { currentPage } = useNav();
+  const { analytics } = usePrivacy();
   const [visitId, setVisitId] = useState<string | null>(null);
   const [locationConsent, setLocationConsent] = useState<LocationConsent>(() => getStoredConsent());
   const [requestingLocation, setRequestingLocation] = useState(false);
   const lastRecordedPage = useRef(currentPage);
 
+  // Nothing is sent until the guest has accepted analytics. Withdrawing
+  // consent deletes the visit record that was already stored.
   useEffect(() => {
+    if (analytics !== 'granted') return;
     let cancelled = false;
 
     startEngagementVisit(currentPage).then((id) => {
@@ -40,7 +46,13 @@ export function EngagementTracker() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [analytics]);
+
+  useEffect(() => {
+    if (analytics !== 'denied' || !visitId) return;
+    void deleteEngagementVisit(visitId);
+    setVisitId(null);
+  }, [analytics, visitId]);
 
   useEffect(() => {
     if (!visitId || lastRecordedPage.current === currentPage) return;
@@ -102,7 +114,7 @@ export function EngagementTracker() {
     if (visitId) void recordEngagementLocation(visitId, { status: 'denied' });
   };
 
-  const shouldShowPrompt = visitId && locationConsent === null;
+  const shouldShowPrompt = analytics === 'granted' && visitId && locationConsent === null;
 
   return (
     <AnimatePresence>

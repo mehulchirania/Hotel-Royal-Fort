@@ -1,0 +1,60 @@
+{
+  "siteUrl": "https://hotelroyalfort.in",
+  "siteName": "Hotel Royal Fort",
+  "pages": {
+    "home": {
+      "path": "/",
+      "name": "Home",
+      "title": "Hotel Royal Fort Ballari | Comfortable Hotel Stay in Bellary",
+      "description": "Hotel Royal Fort in Ballari offers clean AC rooms and suites, a restaurant and lounge, banquet halls and free parking on New Trunk Road, Bellary."
+    },
+    "rooms": {
+      "path": "/rooms",
+      "name": "Rooms & Tariffs",
+      "title": "Rooms & Tariffs | Hotel Royal Fort, Ballari",
+      "description": "Chief AC, Deluxe AC and Suite rooms at Hotel Royal Fort, Ballari, with current tariffs, free parking and Wi-Fi. Book online or enquire directly."
+    },
+    "amenities": {
+      "path": "/amenities",
+      "name": "Amenities",
+      "title": "Amenities & Facilities | Hotel Royal Fort, Ballari",
+      "description": "Free parking, Wi-Fi, restaurant, room service, business centre, lift and wheelchair support at Hotel Royal Fort on New Trunk Road, Ballari."
+    },
+    "events": {
+      "path": "/events",
+      "name": "Events & Banquets",
+      "title": "Banquet Halls & Events in Ballari | Hotel Royal Fort",
+      "description": "Three banquet halls and an outdoor area at Hotel Royal Fort, Ballari, for weddings, receptions, meetings and private functions."
+    },
+    "dining": {
+      "path": "/dining",
+      "name": "Dining",
+      "title": "Restaurant & Lounge | Hotel Royal Fort, Ballari",
+      "description": "The in-house restaurant, lounge and room service at Hotel Royal Fort, Ballari. Dining for hotel guests, families and local visitors."
+    },
+    "gallery": {
+      "path": "/gallery",
+      "name": "Gallery",
+      "title": "Photo Gallery | Hotel Royal Fort, Ballari",
+      "description": "Photographs of Hotel Royal Fort, Ballari: the entrance, reception, guest rooms, restaurant and banquet hall."
+    },
+    "reviews": {
+      "path": "/reviews",
+      "name": "Guest Reviews",
+      "title": "Guest Reviews | Hotel Royal Fort, Ballari",
+      "description": "What guests say about their stay at Hotel Royal Fort, Ballari, with links to read more reviews on Google and travel platforms."
+    },
+    "location": {
+      "path": "/location",
+      "name": "Location",
+      "title": "Location & Directions | Hotel Royal Fort, Ballari",
+      "description": "Hotel Royal Fort is on New Trunk Road, Ballari, about 1.3 km from Bellary Junction Railway Station. Map, landmarks and directions."
+    },
+    "contact": {
+      "path": "/contact",
+      "name": "Contact",
+      "title": "Contact & Enquiries | Hotel Royal Fort, Ballari",
+      "description": "Call, WhatsApp, email or send an enquiry to the Hotel Royal Fort front desk in Ballari. Reception answers around the clock."
+    }
+  }
+}

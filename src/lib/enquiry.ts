@@ -33,13 +33,19 @@ export async function submitEnquiry(payload: EnquiryPayload) {
   return response.json();
 }
 
+/* Insertion order is the order the lines appear in the WhatsApp message.
+   `email` and `message` are here because the contact form collects them —
+   without an entry the guest's own note was silently dropped from the
+   fallback, which is the one message that must never lose anything. */
 const FIELD_LABELS: Record<string, string> = {
   name: 'Name',
   phone: 'Phone',
+  email: 'Email',
   checkIn: 'Check-in',
   checkOut: 'Check-out',
   guests: 'Guests',
   roomType: 'Room',
+  message: 'Message',
 };
 
 /**

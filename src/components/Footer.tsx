@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Facebook, Instagram, Twitter, MapPin } from 'lucide-react';
 import { hotel } from '../data/hotel';
-import { useNav, type Page } from '../context/nav';
-import { legalDocs, legalDocOrder, type LegalDocId } from '../data/legal';
-import { LegalModal } from './LegalModal';
+import { NavLink, type Page } from '../context/nav';
+import { legalDocs, legalDocOrder } from '../data/legal';
+import { usePrivacy } from '../context/privacy';
 
 export function Footer() {
-  const { navigate } = useNav();
-  const [openDoc, setOpenDoc] = useState<LegalDocId | null>(null);
+  const { openLegal, openConsentSettings } = usePrivacy();
 
   const quickLinks: { label: string; page: Page }[] = [
     { label: 'Home', page: 'home' },
@@ -55,12 +54,9 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               {quickLinks.map((link) => (
                 <li key={link.page}>
-                  <button
-                    onClick={() => navigate(link.page)}
-                    className="hover:text-gold-400 transition-colors text-left"
-                  >
+                  <NavLink page={link.page} className="hover:text-gold-400 transition-colors text-left">
                     {link.label}
-                  </button>
+                  </NavLink>
                 </li>
               ))}
             </ul>
@@ -72,7 +68,7 @@ export function Footer() {
               {legalDocOrder.map((id) => (
                 <li key={id}>
                   <button
-                    onClick={() => setOpenDoc(id)}
+                    onClick={() => openLegal(id)}
                     aria-haspopup="dialog"
                     className="hover:text-gold-400 transition-colors text-left"
                   >
@@ -80,7 +76,18 @@ export function Footer() {
                   </button>
                 </li>
               ))}
+              <li>
+                <button onClick={openConsentSettings} className="hover:text-gold-400 transition-colors text-left">
+                  Privacy settings
+                </button>
+              </li>
             </ul>
+            <p className="mt-4 text-xs leading-relaxed max-w-[28ch]">
+              Privacy &amp; data requests: {hotel.dataContact.role},{' '}
+              <a href={`mailto:${hotel.dataContact.email}`} className="underline hover:text-gold-400 break-all">
+                {hotel.dataContact.email}
+              </a>
+            </p>
           </div>
 
           <div>
@@ -103,7 +110,6 @@ export function Footer() {
         </div>
       </div>
 
-      <LegalModal doc={openDoc ? legalDocs[openDoc] : null} onClose={() => setOpenDoc(null)} />
     </footer>
   );
 }

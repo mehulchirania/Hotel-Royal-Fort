@@ -49,7 +49,7 @@ export function Amenities() {
     <section id="amenities" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Amenities & Facilities</h2>
+          <h1 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Amenities & Facilities</h1>
           <p className="text-gray-600">Listing amenities include {hotel.amenities.slice(0, 6).join(', ')}, and more guest services for a comfortable stay.</p>
         </div>
 

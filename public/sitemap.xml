@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  The site is a single-page app; each section is reachable via ?page=<id>
-  (see src/context/nav.tsx), which is what these URLs use.
--->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!-- One real URL per page (see src/data/seo-pages.json). No changefreq/priority:
+     Google ignores them, and no lastmod until the content has real edit dates. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://hotelroyalfort.in/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://hotelroyalfort.in/images/hotel-exterior-1600.webp</image:loc>
+      <image:caption>Hotel Royal Fort building seen from New Trunk Road, Ballari</image:caption>
+    </image:image>
   </url>
   <url>
-    <loc>https://hotelroyalfort.in/?page=rooms</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://hotelroyalfort.in/rooms</loc>
+    <image:image>
+      <image:loc>https://hotelroyalfort.in/images/hotel-room-1024.webp</image:loc>
+      <image:caption>Air-conditioned guest room at Hotel Royal Fort, Ballari</image:caption>
+    </image:image>
   </url>
   <url>
-    <loc>https://hotelroyalfort.in/?page=events</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://hotelroyalfort.in/amenities</loc>
   </url>
   <url>
-    <loc>https://hotelroyalfort.in/?page=amenities</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://hotelroyalfort.in/events</loc>
+    <image:image>
+      <image:loc>https://hotelroyalfort.in/images/banquet-hall-1600.webp</image:loc>
+      <image:caption>Banquet hall at Hotel Royal Fort, Ballari, laid out for a function</image:caption>
+    </image:image>
   </url>
   <url>
-    <loc>https://hotelroyalfort.in/?page=dining</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://hotelroyalfort.in/dining</loc>
+    <image:image>
+      <image:loc>https://hotelroyalfort.in/images/hotel-lobby-dining-1024.webp</image:loc>
+      <image:caption>Restaurant and lounge dining area at Hotel Royal Fort, Ballari</image:caption>
+    </image:image>
   </url>
   <url>
-    <loc>https://hotelroyalfort.in/?page=gallery</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://hotelroyalfort.in/gallery</loc>
+    <image:image>
+      <image:loc>https://hotelroyalfort.in/images/entrance-fort-540.webp</image:loc>
+      <image:caption>Fort-style entrance of Hotel Royal Fort, Ballari</image:caption>
+    </image:image>
   </url>
   <url>
-    <loc>https://hotelroyalfort.in/?page=reviews</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://hotelroyalfort.in/reviews</loc>
   </url>
   <url>
-    <loc>https://hotelroyalfort.in/?page=location</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://hotelroyalfort.in/location</loc>
   </url>
   <url>
-    <loc>https://hotelroyalfort.in/?page=contact</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://hotelroyalfort.in/contact</loc>
   </url>
 </urlset>

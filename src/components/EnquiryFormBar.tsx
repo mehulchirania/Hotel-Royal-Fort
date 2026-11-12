@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Calendar, Home, Phone, Send, MessageCircle, CheckCircle2 } from 'lucide-react';
 import { hotel } from '../data/hotel';
 import { submitEnquiry, buildWhatsAppEnquiryUrl, type EnquiryPayload } from '../lib/enquiry';
+import { ConsentFields, EMPTY_CONSENT } from './ConsentFields';
 
 const EMPTY = {
   name: '',
@@ -14,6 +15,8 @@ const EMPTY = {
 
 export function EnquiryFormBar() {
   const [formData, setFormData] = useState(EMPTY);
+  const [consent, setConsent] = useState(EMPTY_CONSENT);
+  const [website, setWebsite] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   // Retain a wa.me link built from the guest's input so a failed email send
@@ -30,11 +33,18 @@ export function EnquiryFormBar() {
     setStatus('idle');
     setWhatsAppFallback('');
 
-    const payload: EnquiryPayload = { source: 'Quick availability enquiry', ...formData };
+    const payload: EnquiryPayload = {
+      source: 'Quick availability enquiry',
+      ...formData,
+      consent: 'yes',
+      ageConfirmed: 'yes',
+      website,
+    };
 
     try {
       await submitEnquiry(payload);
       setFormData(EMPTY);
+      setConsent(EMPTY_CONSENT);
       setStatus('success');
     } catch {
       // Do not blame the guest — offer the WhatsApp fallback pre-filled.
@@ -139,7 +149,9 @@ export function EnquiryFormBar() {
               </div>
             </div>
 
-            <div className="relative col-span-1 md:col-span-2 lg:col-span-1 flex items-end">
+            <div className="col-span-1 md:col-span-2 lg:col-span-6 relative"><ConsentFields idPrefix="enq" value={consent} onChange={setConsent} website={website} onWebsiteChange={setWebsite} /></div>
+
+<div className="relative col-span-1 md:col-span-2 lg:col-span-1 flex items-end">
               <button 
                 type="submit" 
                 disabled={isSubmitting}

@@ -6,12 +6,12 @@ import { Img } from './Img';
 import { images as imageAssets, type ImageName } from '../data/images.generated';
 
 const tiles: { name: ImageName; alt: string; colSpan: string; rowSpan: string }[] = [
-  { name: 'hotel-exterior', alt: 'Representative hotel exterior view', colSpan: 'col-span-1 md:col-span-2', rowSpan: 'row-span-2' },
-  { name: 'hotel-room', alt: 'Representative AC room interior', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
-  { name: 'hotel-room', alt: 'Representative suite bedding', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
-  { name: 'hotel-lobby-dining', alt: 'Representative front desk area', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
-  { name: 'hotel-exterior', alt: 'Representative hotel approach view', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
-  { name: 'hotel-lobby-dining', alt: 'Representative restaurant and lounge seating', colSpan: 'col-span-1 md:col-span-2', rowSpan: 'row-span-1' },
+  { name: 'hotel-exterior', alt: 'Hotel Royal Fort exterior, Ballari', colSpan: 'col-span-1 md:col-span-2', rowSpan: 'row-span-2' },
+  { name: 'hotel-room', alt: 'Air-conditioned guest room at Hotel Royal Fort', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
+  { name: 'hotel-room', alt: 'Guest room bedding at Hotel Royal Fort', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
+  { name: 'hotel-lobby-dining', alt: 'Lobby and front desk area at Hotel Royal Fort', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
+  { name: 'hotel-exterior', alt: 'Approach to Hotel Royal Fort on New Trunk Road, Ballari', colSpan: 'col-span-1', rowSpan: 'row-span-1' },
+  { name: 'hotel-lobby-dining', alt: 'Restaurant and lounge seating at Hotel Royal Fort', colSpan: 'col-span-1 md:col-span-2', rowSpan: 'row-span-1' },
 ];
 
 export function Gallery() {
@@ -36,7 +36,7 @@ export function Gallery() {
     <section id="gallery" className="py-20 bg-gray-50 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Hotel Gallery</h2>
+          <h1 className="font-serif text-3xl sm:text-4xl text-gray-900 font-bold mb-4">Hotel Gallery</h1>
           <p className="text-gray-600">Browse representative views for rooms and facilities, or open the Google Maps listing for the latest guest photos of Hotel Royal Fort.</p>
           <a href={hotel.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-5 bg-gray-900 text-white px-5 py-2.5 rounded-md font-medium hover:bg-black transition-colors">
             <ExternalLink className="w-4 h-4" />

@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 
-# Visitor-analytics surfaces — token protected, but keep them out of the index.
-Disallow: /admin/
+# Visitor-analytics surfaces — token protected, and kept out of the index.
+Disallow: /admin
 Disallow: /api/
 
 Sitemap: https://hotelroyalfort.in/sitemap.xml

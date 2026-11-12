@@ -6,7 +6,10 @@
     <title>Hotel Royal Fort Ballari | Comfortable Hotel Stay in Bellary</title>
     <meta name="description" content="Hotel Royal Fort in Ballari offers clean rooms, warm hospitality, convenient location access, and comfortable stays for families, business travellers, and visitors to Bellary." />
     <meta name="theme-color" content="#550a0a" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href="https://hotelroyalfort.in/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
 
     <!-- Link previews (WhatsApp, Facebook, X) — guests share hotel links
          constantly. These URLs MUST be absolute; scrapers do not resolve
@@ -32,15 +35,7 @@
          visitor does not flash light. Light is the default; dark only when the
          visitor previously toggled to it. Must stay inline and blocking, and
          must match the default in src/context/theme.tsx. -->
-    <script>
-      (function () {
-        try {
-          if (localStorage.getItem('rf_theme') === 'dark') {
-            document.documentElement.classList.add('dark');
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script src="/theme-init.js"></script>
 
     <!-- Local-business structured data. Values mirror src/data/hotel.ts — keep
          the two in step, since Google may surface this phone number and address
@@ -49,7 +44,10 @@
     {
       "@context": "https://schema.org",
       "@type": "Hotel",
+      "@id": "https://hotelroyalfort.in/#hotel",
       "name": "Hotel Royal Fort",
+      "logo": "https://hotelroyalfort.in/favicon.svg",
+      "areaServed": { "@type": "City", "name": "Ballari" },
       "description": "Hotel Royal Fort in Ballari offers AC rooms and suites, restaurant and lounge facilities, banquet halls, and free on-site parking for families, business travellers, and visitors to Bellary.",
       "url": "https://hotelroyalfort.in/",
       "address": {
@@ -83,6 +81,17 @@
         { "@type": "LocationFeatureSpecification", "name": "Business centre", "value": true },
         { "@type": "LocationFeatureSpecification", "name": "Wheelchair accessible", "value": true }
       ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://hotelroyalfort.in/#website",
+      "url": "https://hotelroyalfort.in/",
+      "name": "Hotel Royal Fort",
+      "inLanguage": "en-IN",
+      "publisher": { "@id": "https://hotelroyalfort.in/#hotel" }
     }
     </script>
   </head>
